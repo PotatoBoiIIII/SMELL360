@@ -1,3 +1,29 @@
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+  import maplibregl from 'maplibre-gl';
+  import { onMount } from 'svelte';
+
+  let map;
+  let mapContainer;
+
+  onMount(() => {
+    map = new maplibregl.Map({
+      container: mapContainer, // container id or element
+      style: 'https://demotiles.maplibre.org/style.json', // basic open style
+      center: [0, 0], // starting position [lng, lat]
+      zoom: 2 // starting zoom
+    });
+
+    return () => {
+      map.remove(); // cleanup on component destroy
+    };
+  });
+</script>
+
+<style>
+  #map {
+    width: 100%;
+    height: 400px;
+  }
+</style>
+
+<div bind:this={mapContainer} id="map"></div>
