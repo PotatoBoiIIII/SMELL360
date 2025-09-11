@@ -44,5 +44,8 @@
 	},
 	"keywords": [
 		"svelte"
-	]
+	],
+	"dependencies": {
+		"sv-popup": "^0.5.3"
+	}
 }
