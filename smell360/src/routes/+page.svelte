@@ -1,14 +1,17 @@
 <script>
   import maplibregl from 'maplibre-gl';
   import { onMount } from 'svelte';
-  import { Modal, Content, Trigger}  from "sv-popup"
+  import Modal from '../lib/Modal.svelte'
   import 'maplibre-gl/dist/maplibre-gl.css';  
   let map;
   let mapContainer;
   let modalOpen = $state(false);
+  let showModal = $state(false)
   let modalContent = $state('');
+  let markerColor = $state('#000000');
+
   function openModal(content,ide){
-    modalOpen=!modalOpen;
+    showModal=!showModal;
     modalContent=content;
     id=ide;
   } 
@@ -27,7 +30,7 @@
      map.on('click', (e) => {
       const { lng, lat } = e.lngLat;
 
-      const marker = new maplibregl.Marker()
+      const marker = new maplibregl.Marker({color:markerColor})
         .setLngLat([lng, lat])
         .addTo(map);
       markers.push({id:10,lng:lng,lat:lat})
@@ -46,11 +49,18 @@
   });
   
 </script>
-{#if modalOpen}
-  <Modal>
-    <p>content:{modalContent}</p>
-  </Modal>
-{/if}
+<Modal bind:showModal>
+  {#snippet header()}
+		<h2>
+			{modalContent}
+		</h2>
+	{/snippet}
+
+</Modal>
+<button onclick={() => (markerColor="#00FFFF")}> blue </button>
+<button onclick={() => (markerColor="#00000")}> black </button>
+<button onclick={() => (markerColor="#FF0000")}> red </button>
+
 <style>
   #map {
     width: 100%;
@@ -62,10 +72,6 @@
   width: 30px;
   height: 40px;
   cursor: pointer;
-}
-Modal{
-  position: fixed;
-  padding: 50;
 }
 
 </style>
