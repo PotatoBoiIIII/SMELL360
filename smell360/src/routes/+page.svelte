@@ -9,11 +9,22 @@
   let showModal = $state(false)
   let modalContent = $state('');
   let markerColor = $state('#000000');
+  let numMarkers = 0;
+  let color = $state('');
+  let openPost = $state(false);
 
-  function openModal(content,ide){
+  // openPost = false;
+
+  function openModalPost(col){
+    openPost = !openPost;
+    numMarkers = 1000;
+    markerColor= col;
+  }
+  function openModal(content,ide,col){
     showModal=!showModal;
     modalContent=content;
     id=ide;
+    color = col
   } 
   let markers = [
     {id:1, lng:100, lat:100},
@@ -29,17 +40,20 @@
     });
      map.on('click', (e) => {
       const { lng, lat } = e.lngLat;
-
+      openModalPost(markerColor);
       const marker = new maplibregl.Marker({color:markerColor})
         .setLngLat([lng, lat])
         .addTo(map);
+      const mcolor = markerColor;
       markers.push({id:10,lng:lng,lat:lat})
+      numMarkers+=1
       const markerElement = marker.getElement();
+      markerElement.id=numMarkers.toString();
       markerElement.addEventListener('click', (event) => {
       event.stopPropagation();
       const content = `Marker at [${lng.toFixed(4)}, ${lat.toFixed(4)}]`;
       
-      openModal(content, 1);
+      openModal( content, markerElement.id,mcolor);
     });
     });
 
@@ -52,8 +66,30 @@
 <Modal bind:showModal>
   {#snippet header()}
 		<h2>
-			{modalContent}
+			{modalContent} color: {color}
 		</h2>
+    <h1 style="color: dimgrey; font-family: sans-serif;">
+      Author:
+ 
+    </h1>
+    <h1 style="color: dimgrey; font-family: sans-serif;">
+      Description:
+ 
+    </h1>
+    <h1 style="color: dimgrey; font-family: sans-serif;">
+      Type: {color}
+ 
+    </h1>
+    <h1 style="color: dimgrey; font-family: sans-serif;">
+      ID: {id}
+ 
+    </h1>
+	{/snippet}
+
+</Modal>
+<Modal bind:showModal={openPost}>
+  {#snippet header()}
+		<h1>this is an input field to create a post</h1>
 	{/snippet}
 
 </Modal>
@@ -72,6 +108,10 @@
   width: 30px;
   height: 40px;
   cursor: pointer;
+}
+h1{
+  color:aqua;
+  font:bold
 }
 
 </style>
