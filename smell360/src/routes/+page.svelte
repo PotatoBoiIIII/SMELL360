@@ -12,12 +12,14 @@
   let numMarkers = 0;
   let color = $state('');
   let openPost = $state(false);
+  let author = '';
+  let report = '';
+  // let name = '';
 
   // openPost = false;
 
   function openModalPost(col){
     openPost = !openPost;
-    numMarkers = 1000;
     markerColor= col;
   }
   function openModal(content,ide,col){
@@ -73,29 +75,39 @@
  
     </h1>
     <h1 style="color: dimgrey; font-family: sans-serif;">
-      Description:
+      Description: {report}
  
     </h1>
     <h1 style="color: dimgrey; font-family: sans-serif;">
-      Type: {color}
+      Type: 
+      {#if color==="#00FFFF"}
+        disturbance
+      {/if}
+      {#if color==="#000000"}
+        event
+      {/if}
+      {#if color==="#FF0000"}
+        crime
+      {/if}
  
     </h1>
     <h1 style="color: dimgrey; font-family: sans-serif;">
       ID: {id}
  
     </h1>
+    
 	{/snippet}
 
 </Modal>
 <Modal bind:showModal={openPost}>
   {#snippet header()}
-		<h1>this is an input field to create a post</h1>
+	 <input type="text" bind:value={report} />
 	{/snippet}
 
 </Modal>
-<button onclick={() => (markerColor="#00FFFF")}> blue </button>
-<button onclick={() => (markerColor="#00000")}> black </button>
-<button onclick={() => (markerColor="#FF0000")}> red </button>
+<button onclick={() => (markerColor="#00FFFF")}> disturbance </button>
+<button onclick={() => (markerColor="#00000")}> event </button>
+<button onclick={() => (markerColor="#FF0000")}> crime </button>
 
 <style>
   #map {
