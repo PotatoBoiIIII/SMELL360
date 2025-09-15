@@ -12,19 +12,24 @@
   let numMarkers = 0;
   let color = $state('');
   let openPost = $state(false);
+  let marker = null;
 
   // openPost = false;
 
   function openModalPost(col){
     openPost = !openPost;
-    numMarkers = 1000;
     markerColor= col;
   }
-  function openModal(content,ide,col){
+  function removeModal(){
+    showModal=false;
+    marker.remove()
+  }
+  function openModal(content,ide,col, mark){
     showModal=!showModal;
     modalContent=content;
     id=ide;
     color = col
+    marker = mark;
   } 
   let markers = [
     {id:1, lng:100, lat:100},
@@ -53,7 +58,7 @@
       event.stopPropagation();
       const content = `Marker at [${lng.toFixed(4)}, ${lat.toFixed(4)}]`;
       
-      openModal( content, markerElement.id,mcolor);
+      openModal( content, markerElement.id,mcolor, marker);
     });
     });
 
@@ -84,6 +89,7 @@
       ID: {id}
  
     </h1>
+    <button onclick={()=> removeModal()}>remove</button>
 	{/snippet}
 
 </Modal>
