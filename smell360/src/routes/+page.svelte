@@ -17,12 +17,6 @@
   let report = '';
   // let name = '';
 
-
-  let marker = null;
-  let author = '';
-  let report = '';
-  // let name = '';
-
   // openPost = false;
 
   function openModalPost(col){
