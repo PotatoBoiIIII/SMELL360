@@ -12,7 +12,12 @@
   let numMarkers = 0;
   let color = $state('');
   let openPost = $state(false);
+
   let marker = null;
+  let author = '';
+  let report = '';
+  // let name = '';
+
 
   // openPost = false;
 
@@ -78,11 +83,20 @@
  
     </h1>
     <h1 style="color: dimgrey; font-family: sans-serif;">
-      Description:
+      Description: {report}
  
     </h1>
     <h1 style="color: dimgrey; font-family: sans-serif;">
-      Type: {color}
+      Type: 
+      {#if color==="#00FFFF"}
+        disturbance
+      {/if}
+      {#if color==="#000000"}
+        event
+      {/if}
+      {#if color==="#FF0000"}
+        crime
+      {/if}
  
     </h1>
     <h1 style="color: dimgrey; font-family: sans-serif;">
@@ -90,23 +104,24 @@
  
     </h1>
     <button onclick={()=> removeModal()}>remove</button>
+
 	{/snippet}
 
 </Modal>
 <Modal bind:showModal={openPost}>
   {#snippet header()}
-		<h1>this is an input field to create a post</h1>
+	 <input type="text" bind:value={report} />
 	{/snippet}
 
 </Modal>
-<button onclick={() => (markerColor="#00FFFF")}> blue </button>
-<button onclick={() => (markerColor="#00000")}> black </button>
-<button onclick={() => (markerColor="#FF0000")}> red </button>
+<button onclick={() => (markerColor="#00FFFF")}> disturbance </button>
+<button onclick={() => (markerColor="#00000")}> event </button>
+<button onclick={() => (markerColor="#FF0000")}> crime </button>
 
 <style>
   #map {
     width: 100%;
-    height: 600px;
+    height: 800px;
   }
   #maplibregl-marker {
   background-image: url('https://cdn.maptiler.com/maplibre-gl-js/v1.15.2/img/marker-icon.png');
