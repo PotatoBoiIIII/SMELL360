@@ -12,12 +12,16 @@
   let numMarkers = 0;
   let color = $state('');
   let openPost = $state(false);
-
   let marker = null;
   let author = '';
   let report = '';
   // let name = '';
 
+
+  let marker = null;
+  let author = '';
+  let report = '';
+  // let name = '';
 
   // openPost = false;
 
@@ -104,7 +108,6 @@
  
     </h1>
     <button onclick={()=> removeModal()}>remove</button>
-
 	{/snippet}
 
 </Modal>
