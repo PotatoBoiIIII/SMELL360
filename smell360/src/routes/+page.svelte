@@ -100,7 +100,7 @@
 <style>
   #map {
     width: 100%;
-    height: 600px;
+    height: 800px;
   }
   #maplibregl-marker {
   background-image: url('https://cdn.maptiler.com/maplibre-gl-js/v1.15.2/img/marker-icon.png');
