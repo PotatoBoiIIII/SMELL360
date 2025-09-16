@@ -151,9 +151,12 @@
 	{/snippet}
   
 </Modal>
-<button onclick={() => (markerColor="#00FFFF")}> disturbance </button>
-<button onclick={() => (markerColor="#00000")}> event </button>
-<button onclick={() => (markerColor="#FF0000")}> crime </button>
+<button style="background-color:honeydew;color:blueviolet;padding:2px;"
+onclick={() => (markerColor="#00FFFF")}> disturbance </button>
+<button style="background-color:honeydew;color:blueviolet;padding:2px;"
+onclick={() => (markerColor="#000000")}> event </button>
+<button style="background-color:honeydew;color:blueviolet;padding:2px;"
+onclick={() => (markerColor="#FF0000")}> crime </button>
 
 <style>
   #map {
