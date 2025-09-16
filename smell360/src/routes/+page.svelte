@@ -14,6 +14,8 @@
   let marker = null;
   let author = '';
   let report = '';
+  let currentlongitude;
+  let currentlatitude;
   // let name = '';
 
   // openPost = false;
@@ -24,7 +26,6 @@
   }
   function removeModal(){
     modalOpen=false;
-    color = "#FFF000"
     modalOpen=modalOpen;
     marker.remove()
   }
@@ -37,17 +38,53 @@
     marker = mark;
   } 
   let markers = [
-    {id:1, lng:100, lat:100},
-    {id:2, lng:100, lat:100},
+    
   ];
   let id = $state(0);
+
+
+
   onMount(() => {
+
+
+    navigator.geolocation.getCurrentPosition(
+  (position) => {
+    // Success callback: position object contains latitude, longitude, and other details
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    currentlongitude=longitude;
+    currentlatitude=latitude;
+    console.log("Latitude:", latitude, "Longitude:", longitude);
+    map = new maplibregl.Map({
+      container: mapContainer, // container id or element
+      style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=F7nv5KBARzvXCzTOadTH', // basic open style
+      center: [currentlongitude, currentlatitude], // starting position [lng, lat]
+      zoom: 12 // starting zoom
+    });
+    marker = new maplibregl.Marker({color:"#00008B"})
+      .setLngLat([currentlongitude, currentlatitude])
+      .addTo(map);
+  },
+  (error) => {
+    // Error callback: handle permission denials or other errors
+    console.error("Error getting location:", error.message);
+  },
+  {
+    // Optional options object
+    enableHighAccuracy: true, // Request more accurate results
+    timeout: 5000, // Maximum time to wait for a position (in milliseconds)
+    maximumAge: 0, // Don't use cached positions
+  }
+);
+
+
     map = new maplibregl.Map({
       container: mapContainer, // container id or element
       style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=F7nv5KBARzvXCzTOadTH', // basic open style
       center: [0, 0], // starting position [lng, lat]
       zoom: 2 // starting zoom
     });
+    
      map.on('click', (e) => {
       const { lng, lat } = e.lngLat;
       openModalPost(markerColor);
@@ -55,10 +92,11 @@
         .setLngLat([lng, lat])
         .addTo(map);
       const mcolor = markerColor;
-      markers.push({id:10,lng:lng,lat:lat})
+      
       numMarkers+=1
       const markerElement = marker.getElement();
       markerElement.id=numMarkers.toString();
+      markers.push({mark: marker,lng:lng,lat:lat})
       markerElement.addEventListener('click', (event) => {
       event.stopPropagation();
       const content = `Marker at [${lng.toFixed(4)}, ${lat.toFixed(4)}]`;
