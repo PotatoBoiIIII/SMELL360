@@ -5,8 +5,7 @@
   import 'maplibre-gl/dist/maplibre-gl.css';  
   let map;
   let mapContainer;
-  let modalOpen = $state(false);
-  let showModal = $state(false)
+  let modalOpen = $state(false)
   let modalContent = $state('');
   let markerColor = $state('#000000');
   let numMarkers = 0;
@@ -24,11 +23,14 @@
     markerColor= col;
   }
   function removeModal(){
-    showModal=false;
+    modalOpen=false;
+    color = "#FFF000"
+    modalOpen=modalOpen;
     marker.remove()
   }
   function openModal(content,ide,col, mark){
-    showModal=!showModal;
+    modalOpen=!modalOpen;
+    modalOpen=modalOpen;
     modalContent=content;
     id=ide;
     color = col
@@ -71,7 +73,7 @@
   });
   
 </script>
-<Modal bind:showModal>
+<Modal bind:showModal={modalOpen}>
   {#snippet header()}
 		<h2>
 			{modalContent} color: {color}
@@ -109,7 +111,7 @@
   {#snippet header()}
 	 <input type="text" bind:value={report} />
 	{/snippet}
-
+  
 </Modal>
 <button onclick={() => (markerColor="#00FFFF")}> disturbance </button>
 <button onclick={() => (markerColor="#00000")}> event </button>
