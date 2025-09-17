@@ -7,7 +7,7 @@
   let mapContainer;
   let modalOpen = $state(false)
   let modalContent = $state('');
-  let markerColor = $state('#000000');
+  let markerColor = $state('');
   let numMarkers = 0;
   let color = $state('');
   let openPost = $state(false);
@@ -45,70 +45,90 @@
 
 
   onMount(() => {
-
-
+  if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
-  (position) => {
-    // Success callback: position object contains latitude, longitude, and other details
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    currentlongitude=longitude;
-    currentlatitude=latitude;
-    console.log("Latitude:", latitude, "Longitude:", longitude);
+      (position) => {
+        currentlatitude = position.coords.latitude;
+        currentlongitude = position.coords.longitude;
+        console.log("Latitude:", currentlatitude, "Longitude:", currentlongitude);
+
+        map = new maplibregl.Map({
+          container: mapContainer,
+          style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=F7nv5KBARzvXCzTOadTH',
+          center: [currentlongitude, currentlatitude],
+          zoom: 12
+        });
+
+        const userMarker = new maplibregl.Marker({ color: "#00008B" })
+          .setLngLat([currentlongitude, currentlatitude])
+          .addTo(map);
+
+        setupMapClickListener();
+        
+      },
+      (error) => {
+        console.error("Error getting location:", error.message);
+
+        map = new maplibregl.Map({
+          container: mapContainer,
+          style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=F7nv5KBARzvXCzTOadTH',
+          center: [0, 0],
+          zoom: 2
+        });
+
+        setupMapClickListener();
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
+  } else {
+    console.error("Geolocation not available");
+
     map = new maplibregl.Map({
-      container: mapContainer, // container id or element
-      style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=F7nv5KBARzvXCzTOadTH', // basic open style
-      center: [currentlongitude, currentlatitude], // starting position [lng, lat]
-      zoom: 12 // starting zoom
+      container: mapContainer,
+      style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=F7nv5KBARzvXCzTOadTH',
+      center: [0, 0],
+      zoom: 2
     });
-    marker = new maplibregl.Marker({color:"#00008B"})
-      .setLngLat([currentlongitude, currentlatitude])
-      .addTo(map);
-  },
-  (error) => {
-    // Error callback: handle permission denials or other errors
-    console.error("Error getting location:", error.message);
-  },
-  {
-    // Optional options object
-    enableHighAccuracy: true, // Request more accurate results
-    timeout: 5000, // Maximum time to wait for a position (in milliseconds)
-    maximumAge: 0, // Don't use cached positions
+
+    setupMapClickListener();
   }
-);
 
-
-    map = new maplibregl.Map({
-      container: mapContainer, // container id or element
-      style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=F7nv5KBARzvXCzTOadTH', // basic open style
-      center: [0, 0], // starting position [lng, lat]
-      zoom: 2 // starting zoom
-    });
+  function setupMapClickListener() {
     
-     map.on('click', (e) => {
+
+    
+    map.on('click', (e) => {
+      if(markerColor !==''){
       const { lng, lat } = e.lngLat;
       openModalPost(markerColor);
-      const marker = new maplibregl.Marker({color:markerColor})
+      const newMarker = new maplibregl.Marker({ color: markerColor })
         .setLngLat([lng, lat])
         .addTo(map);
-      const mcolor = markerColor;
-      
-      numMarkers+=1
-      const markerElement = marker.getElement();
-      markerElement.id=numMarkers.toString();
-      markers.push({mark: marker,lng:lng,lat:lat})
-      markerElement.addEventListener('click', (event) => {
-      event.stopPropagation();
-      const content = `Marker at [${lng.toFixed(4)}, ${lat.toFixed(4)}]`;
-      
-      openModal( content, markerElement.id,mcolor, marker);
-    });
-    });
 
-    return () => {
-      map.remove(); // cleanup on component destroy
-    };
-  });
+      numMarkers += 1;
+      const markerElement = newMarker.getElement();
+      markerElement.id = numMarkers.toString();
+      
+      markers.push({ mark: newMarker, content: report, });
+
+      markerElement.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const content = `Marker at [${lng.toFixed(4)}, ${lat.toFixed(4)}]`;
+        openModal(content, markerElement.id, markerColor, newMarker);
+      });
+      markerColor = "";
+    }});
+  }
+
+  return () => {
+    if (map) map.remove();
+  };
+});
+
   
 </script>
 <Modal bind:showModal={modalOpen}>
