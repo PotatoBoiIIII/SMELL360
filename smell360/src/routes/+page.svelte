@@ -13,7 +13,7 @@
   let openPost = $state(false);
   let marker = null;
   let author = '';
-  let report = '';
+  let report =$state('');
   let currentlongitude;
   let currentlatitude;
   // let name = '';
@@ -113,8 +113,10 @@
       const markerElement = newMarker.getElement();
       markerElement.id = numMarkers.toString();
       
-      markers.push({ mark: newMarker, content: report, });
 
+      
+      markers.push({ mark: newMarker, content: report, });
+      
       markerElement.addEventListener('click', (event) => {
         event.stopPropagation();
         const content = `Marker at [${lng.toFixed(4)}, ${lat.toFixed(4)}]`;
