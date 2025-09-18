@@ -119,6 +119,8 @@
   #map {
     width: 100%;
     height: 800px;
+    border: 4px solid #333; 
+    border-radius: 12px;  
   }
   #maplibregl-marker {
   background-image: url('https://cdn.maptiler.com/maplibre-gl-js/v1.15.2/img/marker-icon.png');
@@ -126,6 +128,16 @@
   width: 30px;
   height: 40px;
   cursor: pointer;
+}
+button {
+  border: 2px solid #333;   /* thickness, style, and color */
+  border-radius: 8px;       /* optional rounded corners */
+  padding: 8px 16px;        /* spacing inside */
+  background-color: white;  /* keep background clean */
+  cursor: pointer;          /* pointer on hover */
+}
+button:hover {
+  background-color: #f0f0f0; /* subtle hover effect */
 }
 h1{
   color:aqua;

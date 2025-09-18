@@ -1,6 +1,2 @@
-# SMELL360
-# EKEK360
-# EKSS360
-# EKMA360
-# EKLY360
-# possible names
+# SMELL360 
+Shayan
