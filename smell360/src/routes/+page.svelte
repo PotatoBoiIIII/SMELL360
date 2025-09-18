@@ -3,6 +3,9 @@
   import { onMount } from 'svelte';
   import Modal from '../lib/Modal.svelte'
   import 'maplibre-gl/dist/maplibre-gl.css';  
+  /** @type {import('./$types').PageProps} */
+	let { data } = $props();
+
   let map;
   let mapContainer;
   let modalOpen = $state(false)
@@ -173,11 +176,11 @@
 	{/snippet}
   
 </Modal>
-<button style="background-color:honeydew;color:blueviolet;padding:2px;"
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew' }"
 onclick={() => (markerColor="#00FFFF")}> disturbance </button>
-<button style="background-color:honeydew;color:blueviolet;padding:2px;"
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#000000' ? '#000000' : 'honeydew' }"
 onclick={() => (markerColor="#000000")}> event </button>
-<button style="background-color:honeydew;color:blueviolet;padding:2px;"
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'honeydew' }"
 onclick={() => (markerColor="#FF0000")}> crime </button>
 
 <style>
