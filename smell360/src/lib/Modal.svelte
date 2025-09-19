@@ -19,22 +19,21 @@
 	onclose={() => (showModal = false)}
 	onclick={(e) => { if (e.target === dialog) dialog.close(); }}
 >
-	<div style="width:90px">
+	<div style="height: 800px; width:500px">
 		{@render header?.()}
 		<hr />
 		{@render children?.()}
 		<hr />
-		<!-- svelte-ignore a11y_autofocus -->
 		<button autofocus onclick={() => dialog.close()}>close modal</button>
 	</div>
 </dialog>
 
 <style>
 	dialog {
-		max-width: 32em;
+		max-width: 100em;
 		border-radius: 0.2em;
 		border: none;
-		padding: 0;
+		padding: 100px;
 	}
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);
