@@ -124,9 +124,9 @@
         event.stopPropagation();
         const content = `Marker at [${lng.toFixed(4)}, ${lat.toFixed(4)}]`;
         openModal(content, markerElement.id, markerColor, newMarker);
-      });
-      markerColor = "";
+      });   
     }});
+    markerColor = "";
   }
 
   return () => {
@@ -136,37 +136,38 @@
 
   
 </script>
+
 <Modal bind:showModal={modalOpen}>
   {#snippet header()}
 		<h2>
 			{modalContent} color: {color}
 		</h2>
-    <h1 style="color: dimgrey; font-family: sans-serif;">
+    <h1 style="color: dimgrey; font-family: sans-serif; font-size:larger;">
       Author:
  
     </h1>
-    <h1 style="color: dimgrey; font-family: sans-serif;">
+    <h1 style="color: dimgrey; font-family: sans-serif; font-size:larger">
       Description: {report}
  
     </h1>
-    <h1 style="color: dimgrey; font-family: sans-serif;">
-      Type: 
-      {#if color==="#00FFFF"}
+    <h1 style="color: dimgrey; font-family: sans-serif; font-size:larger">
+      Type:
+      {#if markerColor==="#00FFFF"}
         disturbance
       {/if}
-      {#if color==="#000000"}
+      {#if markerColor==="#000000"}
         event
       {/if}
-      {#if color==="#FF0000"}
+      {#if markerColor==="#FF0000"}
         crime
       {/if}
  
     </h1>
-    <h1 style="color: dimgrey; font-family: sans-serif;">
+    <h1 style="color: dimgrey; font-family: sans-serif; font-size:large;">
       ID: {id}
  
     </h1>
-    <button onclick={()=> removeModal()}>remove</button>
+    <button style="width:80px; height:35px;" onclick={()=> removeModal()}>remove</button>
 	{/snippet}
 
 </Modal>
@@ -176,13 +177,20 @@
 	{/snippet}
   
 </Modal>
-<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew' }"
-onclick={() => (markerColor="#00FFFF")}> disturbance </button>
-<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#000000' ? '#000000' : 'honeydew' }"
-onclick={() => (markerColor="#000000")}> event </button>
-<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'honeydew' }"
-onclick={() => (markerColor="#FF0000")}> crime </button>
 
+<div  style="display:flex; justify-content: space-around;">
+
+
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew' }; margin:10px 10px"
+onclick={() => (markerColor="#00FFFF")}> disturbance </button>
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#000000' ? '#000000' : 'honeydew' }; margin:10px 10px"
+onclick={() => (markerColor="#000000")}> event </button>
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
+onclick={() => (markerColor="#FF0000")}> crime </button>
+<h1 style="color: dimgrey; font-family: sans-serif; font-size:large; text-align:right;">
+  SMELL360
+</h1>
+</div>
 <style>
   #map {
     width: 100%;
