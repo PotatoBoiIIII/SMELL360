@@ -213,7 +213,7 @@ button {
   cursor: pointer;          /* pointer on hover */
 }
 button:hover {
-  background-color: #f0f0f0; /* subtle hover effect */
+  background-color: #ffffffff; /* subtle hover effect */
 }
 h1{
   color:aqua;
