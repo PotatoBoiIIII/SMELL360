@@ -4,7 +4,7 @@
   import Modal from '../lib/Modal.svelte'
   import 'maplibre-gl/dist/maplibre-gl.css';  
   /** @type {import('./$types').PageProps} */
-	let { data } = $props();
+	let { data, form } = $props();
 
   let map;
   let mapContainer;
@@ -146,11 +146,11 @@
  
     </h1>
     <h1 style="color: dimgrey; font-family: sans-serif;">
-      Description: {report}
+      Description: {data.post.title}
  
     </h1>
     <h1 style="color: dimgrey; font-family: sans-serif;">
-      Type: 
+      Type: {color}
       {#if color==="#00FFFF"}
         disturbance
       {/if}
@@ -172,10 +172,23 @@
 </Modal>
 <Modal bind:showModal={openPost}>
   {#snippet header()}
-	 <input type="text" bind:value={report} />
+	 <form method="POST" action="?/login">
+	<label>
+		Username
+		<input name="email" type="email">
+	</label>
+	<label>
+		Message
+		<input name="password" type="password">
+	</label>
+	<button formaction="?/register">Submit</button>
+</form>
 	{/snippet}
   
 </Modal>
+{#if form?.success}
+<p>works</p>
+{/if}
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew' }"
 onclick={() => (markerColor="#00FFFF")}> disturbance </button>
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#000000' ? '#000000' : 'honeydew' }"

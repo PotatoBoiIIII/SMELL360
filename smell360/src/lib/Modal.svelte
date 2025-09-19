@@ -19,7 +19,7 @@
 	onclose={() => (showModal = false)}
 	onclick={(e) => { if (e.target === dialog) dialog.close(); }}
 >
-	<div>
+	<div style="width:90px">
 		{@render header?.()}
 		<hr />
 		{@render children?.()}
