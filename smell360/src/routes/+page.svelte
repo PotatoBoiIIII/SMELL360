@@ -153,13 +153,13 @@
     <h1 style="color: dimgrey; font-family: sans-serif; font-size:larger">
       Type:
       {#if markerColor==="#00FFFF"}
-        disturbance
+        Disturbance
       {/if}
       {#if markerColor==="#000000"}
-        event
+        Event
       {/if}
       {#if markerColor==="#FF0000"}
-        crime
+        Crime
       {/if}
  
     </h1>
@@ -182,11 +182,11 @@
 
 
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew' }; margin:10px 10px"
-onclick={() => (markerColor="#00FFFF")}> disturbance </button>
+onclick={() => (markerColor="#00FFFF")}> Disturbance </button>
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#000000' ? '#000000' : 'honeydew' }; margin:10px 10px"
-onclick={() => (markerColor="#000000")}> event </button>
+onclick={() => (markerColor="#000000")}> Event </button>
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
-onclick={() => (markerColor="#FF0000")}> crime </button>
+onclick={() => (markerColor="#FF0000")}> Crime </button>
 <h1 style="color: dimgrey; font-family: sans-serif; font-size:large; text-align:right;">
   SMELL360
 </h1>
