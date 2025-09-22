@@ -5,7 +5,6 @@
   import 'maplibre-gl/dist/maplibre-gl.css';  
   /** @type {import('./$types').PageProps} */
 	let { data, form } = $props();
-
   let map;
   let mapContainer;
   let modalOpen = $state(false)
@@ -19,6 +18,7 @@
   let report =$state('');
   let currentlongitude;
   let currentlatitude;
+  let openSearch = $state(false);
   // let name = '';
 
   // openPost = false;
@@ -45,8 +45,10 @@
   ];
   let id = $state(0);
 
+  
+    
 
-
+  
   onMount(() => {
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
@@ -65,7 +67,7 @@
         const userMarker = new maplibregl.Marker({ color: "#00008B" })
           .setLngLat([currentlongitude, currentlatitude])
           .addTo(map);
-
+        marker = userMarker;
         setupMapClickListener();
         
       },
@@ -111,7 +113,8 @@
       const newMarker = new maplibregl.Marker({ color: markerColor })
         .setLngLat([lng, lat])
         .addTo(map);
-
+        
+      newMarker.addClassName(markerColor);
       numMarkers += 1;
       const markerElement = newMarker.getElement();
       markerElement.id = numMarkers.toString();
@@ -127,6 +130,7 @@
       });   
     }});
     markerColor = "";
+
   }
 
   return () => {
@@ -138,9 +142,10 @@
 </script>
 
 <Modal bind:showModal={modalOpen}>
+  
   {#snippet header()}
 		<h2>
-			{modalContent} color: {color}
+			{modalContent} color: {color} 
 		</h2>
     <h1 style="color: dimgrey; font-family: sans-serif; font-size:larger;">
       Author:
@@ -168,6 +173,9 @@
 	{/snippet}
 
 </Modal>
+{#if form?.success}
+  <p>{form?.message}</p>
+{/if}
 <Modal bind:showModal={openPost}>
   {#snippet header()}
 	 <form method="POST" action="?/login">
@@ -187,13 +195,20 @@
 
 <div  style="display:flex; justify-content: space-around;">
 
-
+<Modal bind:showModal = {openSearch}>
+  <button style="color:blueviolet;padding:2px;margin:10px 10px"> 
+  Disturbance </button>
+  <button style="color:blueviolet;padding:2px;margin:10px 10px"> Event </button>
+  <button style="color:blueviolet;padding:2px;margin:10px 10px"> Crime </button>
+</Modal>
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew' }; margin:10px 10px"
 onclick={() => (markerColor="#00FFFF")}> Disturbance </button>
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#000000' ? '#000000' : 'honeydew' }; margin:10px 10px"
 onclick={() => (markerColor="#000000")}> Event </button>
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
 onclick={() => (markerColor="#FF0000")}> Crime </button>
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#0000FF' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
+onclick={() => (openSearch = true)}> Search for button</button>
 <h1 style="color: dimgrey; font-family: sans-serif; font-size:large; text-align:right;">
   SMELL360
 </h1>
