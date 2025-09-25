@@ -14,7 +14,7 @@
   let color = $state('');
   let openPost = $state(false);
   let marker = null;
-  let author = '';
+  let author = $state('');
   let report =$state('');
   let currentlongitude;
   let currentlatitude;
@@ -39,15 +39,14 @@
     id=ide;
     color = col
     marker = mark;
+    markerColor = marker.getElement().style.backgroundColor
+    markerColor=markerColor;
+    author = markerColor;
   } 
   let markers = [
     
   ];
   let id = $state(0);
-
-  
-    
-
   
   onMount(() => {
   if ('geolocation' in navigator) {
@@ -118,7 +117,8 @@
       numMarkers += 1;
       const markerElement = newMarker.getElement();
       markerElement.id = numMarkers.toString();
-      
+      markerColor = "";
+      markerColor=markerColor;
 
       
       markers.push({ mark: newMarker, content: report, });
@@ -129,10 +129,10 @@
         openModal(content, markerElement.id, markerColor, newMarker);
       });   
     }});
-    markerColor = "";
+   
 
   }
-
+  
   return () => {
     if (map) map.remove();
   };
@@ -145,7 +145,7 @@
   
   {#snippet header()}
 		<h2>
-			{modalContent} color: {color} 
+			{modalContent} color: {color} {author}
 		</h2>
     <h1 style="color: dimgrey; font-family: sans-serif; font-size:larger;">
       Author:
@@ -154,7 +154,7 @@
     
     <h1 style="color: dimgrey; font-family: sans-serif; font-size:larger">
       Type:
-      {#if markerColor==="#00FFFF"}
+      {#if markerColor==="rgba(0, 0, 0, 0)"}
         Disturbance
       {/if}
       {#if markerColor==="#000000"}
@@ -187,17 +187,17 @@
 		Message
 		<input name="password" type="password">
 	</label>
+    
 	<button formaction="?/register">Submit</button>
 </form>
 	{/snippet}
   
-</Modal>
-
+</Modal> 
 <div  style="display:flex; justify-content: space-around;">
 
 <Modal bind:showModal = {openSearch}>
-  <button style="color:blueviolet;padding:2px;margin:10px 10px"> 
-  Disturbance </button>
+  <button style="color:blueviolet;padding:2px;margin:10px 10px"
+  > Disturbance </button>
   <button style="color:blueviolet;padding:2px;margin:10px 10px"> Event </button>
   <button style="color:blueviolet;padding:2px;margin:10px 10px"> Crime </button>
 </Modal>
@@ -239,7 +239,6 @@ button:hover {
 }
 h1{
   color:aqua;
-  font:bold
 }
 
 </style>
