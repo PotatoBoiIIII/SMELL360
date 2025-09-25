@@ -2,7 +2,8 @@
   import maplibregl from 'maplibre-gl';
   import { onMount } from 'svelte';
   import Modal from '../lib/Modal.svelte'
-  import 'maplibre-gl/dist/maplibre-gl.css';  
+  import 'maplibre-gl/dist/maplibre-gl.css';
+  import { Input, Label, Button, Checkbox, A } from "flowbite-svelte";  
   /** @type {import('./$types').PageProps} */
 	let { data, form } = $props();
 
@@ -142,12 +143,12 @@
 		<h2>
 			{modalContent} color: {color}
 		</h2>
-    <h1 style="color: dimgrey; font-family: sans-serif; font-size:larger;">
+    <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger;">
       Author:
  
     </h1>
     
-    <h1 style="color: dimgrey; font-family: sans-serif; font-size:larger">
+    <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger">
       Type:
       {#if markerColor==="#00FFFF"}
         Disturbance
@@ -160,7 +161,7 @@
       {/if}
  
     </h1>
-    <h1 style="color: dimgrey; font-family: sans-serif; font-size:large;">
+    <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:large;">
       ID: {id}
  
     </h1>
@@ -169,19 +170,43 @@
 
 </Modal>
 <Modal bind:showModal={openPost}>
-  {#snippet header()}
-	 <form method="POST" action="?/login">
-	<label>
-		Username
-		<input name="email" type="email">
-	</label>
-	<label>
-		Message
-		<input name="password" type="password">
-	</label>
-	<button formaction="?/register">Submit</button>
+
+<form>
+  <div class="mb-6 grid gap-6 md:grid-cols-2">
+    <div>
+      <Label for="first_name" class="mb-2">First name</Label>
+      <Input type="text" id="first_name" placeholder="John" required />
+    </div>
+    <div>
+      <Label for="last_name" class="mb-2">Last name</Label>
+      <Input type="text" id="last_name" placeholder="Doe" required />
+    </div>
+    <div>
+      <Label for="company" class="mb-2">Company</Label>
+      <Input type="text" id="company" placeholder="Flowbite" required />
+    </div>
+    <div>
+      <Label for="phone" class="mb-2">Phone number</Label>
+      <Input type="tel" id="phone" placeholder="123-45-678" pattern={"[0-9]{3}-[0-9]{2}-[0-9]{3}"} required />
+    </div>
+  </div>
+  <div class="mb-6">
+    <Label for="email" class="mb-2">Email address</Label>
+    <Input type="email" id="email" placeholder="john.doe@company.com" required />
+  </div>
+  <div class="mb-6">
+    <Label for="password" class="mb-2">Password</Label>
+    <Input type="password" id="password" placeholder="•••••••••" required />
+  </div>
+  <div class="mb-6">
+    <Label for="confirm_password" class="mb-2">Confirm password</Label>
+    <Input type="password" id="confirm_password" placeholder="•••••••••" required />
+  </div>
+  <Checkbox classes={{ div: "mb-6 gap-1 rtl:space-x-reverse" }} required>
+    I agree with the <A href="/" class="text-primary-700 dark:text-primary-600 hover:underline">terms and conditions</A>.
+  </Checkbox>
+  <Button type="submit">Submit</Button>
 </form>
-	{/snippet}
   
 </Modal>
 
