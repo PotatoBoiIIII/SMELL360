@@ -8,9 +8,10 @@ export const actions = {
 		// some code
 		return { success: true };
 	},
-	register: async (event) => {
+	register: async ({request}) => {
 		// some code
-		return { success: true };
+		const data = await request.formData();
+		return { success: true, message: data.get('email') };
 	}
 };
 

@@ -6,7 +6,6 @@
   import { Input, Label, Button, Checkbox, A } from "flowbite-svelte";  
   /** @type {import('./$types').PageProps} */
 	let { data, form } = $props();
-
   let map;
   let mapContainer;
   let modalOpen = $state(false)
@@ -16,10 +15,11 @@
   let color = $state('');
   let openPost = $state(false);
   let marker = null;
-  let author = '';
+  let author = $state('');
   let report =$state('');
   let currentlongitude;
   let currentlatitude;
+  let openSearch = $state(false);
   // let name = '';
 
   // openPost = false;
@@ -40,14 +40,15 @@
     id=ide;
     color = col
     marker = mark;
+    markerColor = marker.getElement().style.backgroundColor
+    markerColor=markerColor;
+    author = markerColor;
   } 
   let markers = [
     
   ];
   let id = $state(0);
-
-
-
+  
   onMount(() => {
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
@@ -66,7 +67,7 @@
         const userMarker = new maplibregl.Marker({ color: "#00008B" })
           .setLngLat([currentlongitude, currentlatitude])
           .addTo(map);
-
+        marker = userMarker;
         setupMapClickListener();
         
       },
@@ -112,11 +113,13 @@
       const newMarker = new maplibregl.Marker({ color: markerColor })
         .setLngLat([lng, lat])
         .addTo(map);
-
+        
+      newMarker.addClassName(markerColor);
       numMarkers += 1;
       const markerElement = newMarker.getElement();
       markerElement.id = numMarkers.toString();
-      
+      markerColor = "";
+      markerColor=markerColor;
 
       
       markers.push({ mark: newMarker, content: report, });
@@ -127,9 +130,10 @@
         openModal(content, markerElement.id, markerColor, newMarker);
       });   
     }});
-    markerColor = "";
-  }
+   
 
+  }
+  
   return () => {
     if (map) map.remove();
   };
@@ -139,9 +143,10 @@
 </script>
 
 <Modal bind:showModal={modalOpen}>
+  
   {#snippet header()}
 		<h2>
-			{modalContent} color: {color}
+			{modalContent} color: {color} {author}
 		</h2>
     <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger;">
       Author:
@@ -150,7 +155,7 @@
     
     <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger">
       Type:
-      {#if markerColor==="#00FFFF"}
+      {#if markerColor==="rgba(0, 0, 0, 0)"}
         Disturbance
       {/if}
       {#if markerColor==="#000000"}
@@ -169,6 +174,9 @@
 	{/snippet}
 
 </Modal>
+{#if form?.success}
+  <p>{form?.message}</p>
+{/if}
 <Modal bind:showModal={openPost}>
 
 <form>
@@ -208,17 +216,23 @@
   <Button type="submit">Submit</Button>
 </form>
   
-</Modal>
-
+</Modal> 
 <div  style="display:flex; justify-content: space-around;">
 
-
+<Modal bind:showModal = {openSearch}>
+  <button style="color:blueviolet;padding:2px;margin:10px 10px"
+  > Disturbance </button>
+  <button style="color:blueviolet;padding:2px;margin:10px 10px"> Event </button>
+  <button style="color:blueviolet;padding:2px;margin:10px 10px"> Crime </button>
+</Modal>
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew' }; margin:10px 10px"
 onclick={() => (markerColor="#00FFFF")}> Disturbance </button>
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#000000' ? '#000000' : 'honeydew' }; margin:10px 10px"
 onclick={() => (markerColor="#000000")}> Event </button>
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
 onclick={() => (markerColor="#FF0000")}> Crime </button>
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#0000FF' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
+onclick={() => (openSearch = true)}> Search for button</button>
 <h1 style="color: dimgrey; font-family: sans-serif; font-size:large; text-align:right;">
   SMELL360
 </h1>
@@ -249,7 +263,6 @@ button:hover {
 }
 h1{
   color:aqua;
-  font:bold
 }
 
 </style>
