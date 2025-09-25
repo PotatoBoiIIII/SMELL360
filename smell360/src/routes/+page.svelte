@@ -190,10 +190,6 @@
       <Input type="text" id="last_name" placeholder="Doe" required />
     </div>
     <div>
-      <Label for="company" class="mb-2">Company</Label>
-      <Input type="text" id="company" placeholder="Flowbite" required />
-    </div>
-    <div>
       <Label for="phone" class="mb-2">Phone number</Label>
       <Input type="tel" id="phone" placeholder="123-45-678" pattern={"[0-9]{3}-[0-9]{2}-[0-9]{3}"} required />
     </div>
