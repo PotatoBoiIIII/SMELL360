@@ -28,7 +28,7 @@ export const actions = {
 		console.log("data retrived")
 		update(ref(db.db), {
 
-			author: "Jane",
+			author: data.get('email'),
 
 			text: "Hello Firebase!"
 

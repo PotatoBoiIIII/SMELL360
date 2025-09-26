@@ -3,7 +3,8 @@
   import { onMount } from 'svelte';
   import Modal from '../lib/Modal.svelte'
   import 'maplibre-gl/dist/maplibre-gl.css';
-  import { Input, Label, Button, Checkbox, A } from "flowbite-svelte";  
+  import { Input, Label, Button, Checkbox, A } from "flowbite-svelte";
+  import { getDatabase, ref, child, push, update, set,query,get,onValue } from "firebase/database";  
   import db from '$lib/firebase.js'
   /** @type {import('./$types').PageProps} */
 	let { data, form } = $props();
@@ -13,14 +14,22 @@
   let modalContent = $state('');
   let markerColor = $state('');
   let numMarkers = 0;
-  let color = $state('');
+  let color = $state('')
+  let data2=$state('');
   let openPost = $state(false);
-  let marker = null;
+  let marker = $state(null);
   let author = $state('');
   let report =$state('');
   let currentlongitude;
   let currentlatitude;
   let openSearch = $state(false);
+  let markers = [
+    
+  ];
+  let id = $state(0);
+
+
+
   
   // let name = '';
 
@@ -42,16 +51,25 @@
     id=ide;
     color = col
     marker = mark;
+    marker = marker;
     markerColor = marker.getElement().style.backgroundColor
     markerColor=markerColor;
     author = markerColor;
   } 
-  let markers = [
-    
-  ];
-  let id = $state(0);
   
-  onMount(() => {
+  
+  onMount(async () => {
+    try {
+      const snapshot = await get(ref(db.db, 'markers/'+id));
+      if (snapshot.exists()) {
+        data2 = snapshot.val();
+      } else {
+        console.log("No data available");
+      }
+    } catch (err) {
+      console.error(err);
+      
+    }
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -108,7 +126,7 @@
     
 
     
-    map.on('click', (e) => {
+    map.on('click', async (e) => {
       if(markerColor !==''){
       const { lng, lat } = e.lngLat;
       openModalPost(markerColor);
@@ -119,12 +137,26 @@
       newMarker.addClassName(markerColor);
       numMarkers += 1;
       const markerElement = newMarker.getElement();
-      markerElement.id = numMarkers.toString();
-      markerColor = "";
-      markerColor=markerColor;
+      
+      
 
       
       markers.push({ mark: newMarker, content: report, });
+      const postListRef = ref(db.db, 'markers');
+      const newPostRef = push(postListRef);
+      const key = newPostRef.key;
+      set(newPostRef, {
+          color:"color3",
+          marker: {
+            color: markerColor,
+            latitude: lat,
+            longitude: lng,
+
+          }
+      });
+      markerColor = "";
+      markerColor=markerColor;
+      markerElement.id = key;
       
       markerElement.addEventListener('click', (event) => {
         event.stopPropagation();
@@ -148,7 +180,7 @@
   
   {#snippet header()}
 		<h2>
-			{modalContent} color: {color} {author}
+			{modalContent} color: {marker!=null ?  data2: "color"}
 		</h2>
     <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger;">
       Author:
