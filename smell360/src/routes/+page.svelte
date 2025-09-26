@@ -4,6 +4,7 @@
   import Modal from '../lib/Modal.svelte'
   import 'maplibre-gl/dist/maplibre-gl.css';
   import { Input, Label, Button, Checkbox, A } from "flowbite-svelte";  
+  import db from '$lib/firebase.js'
   /** @type {import('./$types').PageProps} */
 	let { data, form } = $props();
   let map;
@@ -20,6 +21,7 @@
   let currentlongitude;
   let currentlatitude;
   let openSearch = $state(false);
+  
   // let name = '';
 
   // openPost = false;
@@ -179,7 +181,7 @@
 {/if}
 <Modal bind:showModal={openPost}>
 
-<form>
+<form  method="POST" action="?/login">
   <div class="mb-6 grid gap-6 md:grid-cols-2">
     <div>
       <Label for="first_name" class="mb-2">First name</Label>
@@ -196,21 +198,22 @@
   </div>
   <div class="mb-6">
     <Label for="email" class="mb-2">Email address</Label>
-    <Input type="email" id="email" placeholder="john.doe@company.com" required />
+    <Input name = "email" type="email" id="email" placeholder="john.doe@company.com" required />
   </div>
   <div class="mb-6">
     <Label for="password" class="mb-2">Password</Label>
-    <Input type="password" id="password" placeholder="•••••••••" required />
+    <Input name = "password" type="password" id="password" placeholder="•••••••••" required />
   </div>
   <div class="mb-6">
     <Label for="confirm_password" class="mb-2">Confirm password</Label>
-    <Input type="password" id="confirm_password" placeholder="•••••••••" required />
+    <Input name = "confirmPassword" type="password" id="confirm_password" placeholder="•••••••••" required />
   </div>
   <Checkbox classes={{ div: "mb-6 gap-1 rtl:space-x-reverse" }} required>
     I agree with the <A href="/" class="text-primary-700 dark:text-primary-600 hover:underline">terms and conditions</A>.
   </Checkbox>
-  <Button type="submit">Submit</Button>
+  <button formaction = "?/register">Submit</button>
 </form>
+
   
 </Modal> 
 <div  style="display:flex; justify-content: space-around;">
