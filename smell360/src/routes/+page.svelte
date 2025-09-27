@@ -1,10 +1,10 @@
-<script>
+  <script>
   import maplibregl from 'maplibre-gl';
   import { onMount } from 'svelte';
   import Modal from '../lib/Modal.svelte'
   import 'maplibre-gl/dist/maplibre-gl.css';
   import { Input, Label, Button, Checkbox, A } from "flowbite-svelte";
-  import { getDatabase, ref, child, push, update, set,query,get,onValue } from "firebase/database";  
+  import { getDatabase, ref, child, push, update, set,query,get,onValue, remove } from "firebase/database";  
   import db from '$lib/firebase.js'
   /** @type {import('./$types').PageProps} */
 	let { data, form } = $props();
@@ -15,10 +15,10 @@
   let markerColor = $state('');
   let numMarkers = 0;
   let color = $state('')
-  let data2=$state('');
+  let data2=$state(JSON);
   let openPost = $state(false);
   let marker = $state(null);
-  let author = $state('');
+  let author = $state(''); // let author = $state['']
   let report =$state('');
   let currentlongitude;
   let currentlatitude;
@@ -26,7 +26,8 @@
   let markers = [
     
   ];
-  let id = $state(0);
+  let id = $state("");
+  let keys=$state();
 
 
 
@@ -42,6 +43,7 @@
   function removeModal(){
     modalOpen=false;
     modalOpen=modalOpen;
+    remove(ref(db.db,'markers/'+id))
     marker.remove()
   }
   function openModal(content,ide,col, mark){
@@ -59,17 +61,16 @@
   
   
   onMount(async () => {
-    try {
-      const snapshot = await get(ref(db.db, 'markers/'+id));
-      if (snapshot.exists()) {
-        data2 = snapshot.val();
-      } else {
-        console.log("No data available");
-      }
-    } catch (err) {
-      console.error(err);
-      
-    }
+    
+    await onValue(ref(db.db, 'markers/'), (snapshot) => {
+      const data = snapshot.val();
+      data2=data
+      data2=data2
+      let key = Object.keys(data);
+      keys=key;
+      keys=keys
+    });
+     
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -89,6 +90,19 @@
           .addTo(map);
         marker = userMarker;
         setupMapClickListener();
+        keys.forEach(key=>{
+          const newMark = new maplibregl.Marker({color: data2[key]?.marker?.color})
+            .setLngLat([data2[key]?.marker?.longitude, data2[key]?.marker?.latitude])
+            .addTo(map);
+          const markerElement = newMark.getElement();
+          markerElement.id = key;
+      
+          markerElement.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const content = `Marker at [${data2[key]?.marker?.longitude.toFixed(4)}, ${data2[key]?.marker?.latitude.toFixed(4)}]`;
+            openModal(content, markerElement.id, markerColor, newMark);
+          });   
+        })
         
       },
       (error) => {
@@ -180,24 +194,25 @@
   
   {#snippet header()}
 		<h2>
-			{modalContent} color: {marker!=null ?  data2: "color"}
+			{modalContent} color: {JSON.stringify(data2[id])}
 		</h2>
     <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger;">
-      Author:
+      Author: 
  
     </h1>
     
     <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger">
       Type:
-      {#if markerColor==="rgba(0, 0, 0, 0)"}
+      {#if data2[id]?.marker?.color==="#00FFFF"}
         Disturbance
       {/if}
-      {#if markerColor==="#000000"}
+      {#if data2[id]?.marker?.color==="#000000"}
         Event
       {/if}
-      {#if markerColor==="#FF0000"}
+      {#if data2[id]?.marker?.color==="#FF0000"}
         Crime
       {/if}
+      
  
     </h1>
     <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:large;">
@@ -217,11 +232,11 @@
   <div class="mb-6 grid gap-6 md:grid-cols-2">
     <div>
       <Label for="first_name" class="mb-2">First name</Label>
-      <Input type="text" id="first_name" placeholder="John" required />
+      <Input name = 'firstName' type="text" id="first_name" placeholder="John" required />
     </div>
     <div>
       <Label for="last_name" class="mb-2">Last name</Label>
-      <Input type="text" id="last_name" placeholder="Doe" required />
+      <Input name = 'lastName' type="text" id="last_name" placeholder="Doe" required />
     </div>
     <div>
       <Label for="phone" class="mb-2">Phone number</Label>
@@ -283,14 +298,14 @@ onclick={() => (openSearch = true)}> Search for button</button>
   cursor: pointer;
 }
 button {
-  border: 2px solid #333;   /* thickness, style, and color */
-  border-radius: 8px;       /* optional rounded corners */
-  padding: 8px 16px;        /* spacing inside */
-  background-color: white;  /* keep background clean */
-  cursor: pointer;          /* pointer on hover */
+  border: 2px solid #333; 
+  border-radius: 8px;
+  padding: 8px 16px;
+  background-color: white;
+  cursor: pointer;
 }
 button:hover {
-  background-color: #ffffffff; /* subtle hover effect */
+  background-color: #ffffffff; 
 }
 h1{
   color:aqua;

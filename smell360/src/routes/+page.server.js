@@ -1,6 +1,6 @@
 /** @satisfies {import('./$types').Actions} */
 import db from '$lib/firebase.js'
-import { ref, push,update } from "firebase/database";
+import { ref, push,update, remove } from "firebase/database";
 
 
 console.log('backend running');
@@ -26,14 +26,18 @@ export const actions = {
 		// some code
 		const data = await request.formData();
 		console.log("data retrived")
+
+		const first = data.get('firstName')?.toString()
+		const last = data.get('lastName')?.toString()
+		const author = first+last
 		update(ref(db.db), {
 
-			author: data.get('email'),
+			author: author,
 
 			text: "Hello Firebase!"
 
 		})
-
+		
 
 		return { success: true, message: data.get('email')  };
 		
