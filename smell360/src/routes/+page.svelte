@@ -34,12 +34,12 @@
     marker.remove()
   }
   function openModal(content,ide,col, mark){
-    modalOpen=!modalOpen;
-    modalOpen=modalOpen;
-    modalContent=content;
-    id=ide;
+    modalOpen=!modalOpen
+    modalOpen=modalOpen
+    modalContent=content
+    id=ide
     color = col
-    marker = mark;
+    marker = mark
     markerColor = marker.getElement().style.backgroundColor
     markerColor=markerColor;
     author = markerColor;
@@ -187,7 +187,7 @@
     </div>
     <div>
       <Label for="last_name" class="mb-2">Last name</Label>
-      <Input type="text" id="last_name" placeholder="Doe" required />
+      <Input type="text" id="last_name" placeholder="Doe" required bind:value={author} />
     </div>
     <div>
       <Label for="phone" class="mb-2">Phone number</Label>
