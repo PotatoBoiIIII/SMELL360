@@ -9,6 +9,6 @@
         plugins: [
             require('flowbite/plugin')
         ],
-        darkMode: 'class', // Optional: for dark mode support
+        darkMode: 'class',
     };
     module.exports = config;

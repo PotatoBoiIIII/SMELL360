@@ -1,9 +1,11 @@
-<script>
+  <script>
   import maplibregl from 'maplibre-gl';
   import { onMount } from 'svelte';
   import Modal from '../lib/Modal.svelte'
   import 'maplibre-gl/dist/maplibre-gl.css';
-  import { Input, Label, Button, Checkbox, A } from "flowbite-svelte";  
+  import { Input, Label, Button, Checkbox, A } from "flowbite-svelte";
+  import { getDatabase, ref, child, push, update, set,query,get,onValue, remove } from "firebase/database";  
+  import db from '$lib/firebase.js'
   /** @type {import('./$types').PageProps} */
 	let { data, form } = $props();
   let map;
@@ -12,14 +14,24 @@
   let modalContent = $state('');
   let markerColor = $state('');
   let numMarkers = 0;
-  let color = $state('');
+  let color = $state('')
+  let data2=$state(JSON);
   let openPost = $state(false);
-  let marker = null;
-  let author = $state('');
+  let marker = $state(null);
+  let author = $state(''); // let author = $state['']
   let report =$state('');
   let currentlongitude;
   let currentlatitude;
   let openSearch = $state(false);
+  let markers = [
+    
+  ];
+  let id = $state("");
+  let keys=$state();
+
+
+
+  
   // let name = '';
 
   // openPost = false;
@@ -31,6 +43,7 @@
   function removeModal(){
     modalOpen=false;
     modalOpen=modalOpen;
+    remove(ref(db.db,'markers/'+id))
     marker.remove()
   }
   function openModal(content,ide,col, mark){
@@ -39,17 +52,25 @@
     modalContent=content
     id=ide
     color = col
-    marker = mark
+    marker = mark;
+    marker = marker;
     markerColor = marker.getElement().style.backgroundColor
     markerColor=markerColor;
     author = markerColor;
   } 
-  let markers = [
-    
-  ];
-  let id = $state(0);
   
-  onMount(() => {
+  
+  onMount(async () => {
+    
+    await onValue(ref(db.db, 'markers/'), (snapshot) => {
+      const data = snapshot.val();
+      data2=data
+      data2=data2
+      let key = Object.keys(data);
+      keys=key;
+      keys=keys
+    });
+     
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -69,6 +90,19 @@
           .addTo(map);
         marker = userMarker;
         setupMapClickListener();
+        keys.forEach(key=>{
+          const newMark = new maplibregl.Marker({color: data2[key]?.marker?.color})
+            .setLngLat([data2[key]?.marker?.longitude, data2[key]?.marker?.latitude])
+            .addTo(map);
+          const markerElement = newMark.getElement();
+          markerElement.id = key;
+      
+          markerElement.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const content = `Marker at [${data2[key]?.marker?.longitude.toFixed(4)}, ${data2[key]?.marker?.latitude.toFixed(4)}]`;
+            openModal(content, markerElement.id, markerColor, newMark);
+          });   
+        })
         
       },
       (error) => {
@@ -106,7 +140,7 @@
     
 
     
-    map.on('click', (e) => {
+    map.on('click', async (e) => {
       if(markerColor !==''){
       const { lng, lat } = e.lngLat;
       openModalPost(markerColor);
@@ -117,12 +151,26 @@
       newMarker.addClassName(markerColor);
       numMarkers += 1;
       const markerElement = newMarker.getElement();
-      markerElement.id = numMarkers.toString();
-      markerColor = "";
-      markerColor=markerColor;
+      
+      
 
       
       markers.push({ mark: newMarker, content: report, });
+      const postListRef = ref(db.db, 'markers');
+      const newPostRef = push(postListRef);
+      const key = newPostRef.key;
+      set(newPostRef, {
+          color:"color3",
+          marker: {
+            color: markerColor,
+            latitude: lat,
+            longitude: lng,
+
+          }
+      });
+      markerColor = "";
+      markerColor=markerColor;
+      markerElement.id = key;
       
       markerElement.addEventListener('click', (event) => {
         event.stopPropagation();
@@ -146,24 +194,25 @@
   
   {#snippet header()}
 		<h2>
-			{modalContent} color: {color} {author}
+			{modalContent} color: {JSON.stringify(data2[id])}
 		</h2>
     <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger;">
-      Author:
+      Author: 
  
     </h1>
     
     <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger">
       Type:
-      {#if markerColor==="rgba(0, 0, 0, 0)"}
+      {#if data2[id]?.marker?.color==="#00FFFF"}
         Disturbance
       {/if}
-      {#if markerColor==="#000000"}
+      {#if data2[id]?.marker?.color==="#000000"}
         Event
       {/if}
-      {#if markerColor==="#FF0000"}
+      {#if data2[id]?.marker?.color==="#FF0000"}
         Crime
       {/if}
+      
  
     </h1>
     <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:large;">
@@ -179,15 +228,15 @@
 {/if}
 <Modal bind:showModal={openPost}>
 
-<form>
+<form  method="POST" action="?/login">
   <div class="mb-6 grid gap-6 md:grid-cols-2">
     <div>
       <Label for="first_name" class="mb-2">First name</Label>
-      <Input type="text" id="first_name" placeholder="John" required />
+      <Input name = 'firstName' type="text" id="first_name" placeholder="John" required />
     </div>
     <div>
       <Label for="last_name" class="mb-2">Last name</Label>
-      <Input type="text" id="last_name" placeholder="Doe" required bind:value={author} />
+      <Input name = 'lastName' type="text" id="last_name" placeholder="Doe" required />
     </div>
     <div>
       <Label for="phone" class="mb-2">Phone number</Label>
@@ -196,21 +245,22 @@
   </div>
   <div class="mb-6">
     <Label for="email" class="mb-2">Email address</Label>
-    <Input type="email" id="email" placeholder="john.doe@company.com" required />
+    <Input name = "email" type="email" id="email" placeholder="john.doe@company.com" required />
   </div>
   <div class="mb-6">
     <Label for="password" class="mb-2">Password</Label>
-    <Input type="password" id="password" placeholder="•••••••••" required />
+    <Input name = "password" type="password" id="password" placeholder="•••••••••" required />
   </div>
   <div class="mb-6">
     <Label for="confirm_password" class="mb-2">Confirm password</Label>
-    <Input type="password" id="confirm_password" placeholder="•••••••••" required />
+    <Input name = "confirmPassword" type="password" id="confirm_password" placeholder="•••••••••" required />
   </div>
   <Checkbox classes={{ div: "mb-6 gap-1 rtl:space-x-reverse" }} required>
     I agree with the <A href="/" class="text-primary-700 dark:text-primary-600 hover:underline">terms and conditions</A>.
   </Checkbox>
-  <Button type="submit">Submit</Button>
+  <button formaction = "?/register">Submit</button>
 </form>
+
   
 </Modal> 
 <div  style="display:flex; justify-content: space-around;">
@@ -248,14 +298,14 @@ onclick={() => (openSearch = true)}> Search for button</button>
   cursor: pointer;
 }
 button {
-  border: 2px solid #333;   /* thickness, style, and color */
-  border-radius: 8px;       /* optional rounded corners */
-  padding: 8px 16px;        /* spacing inside */
-  background-color: white;  /* keep background clean */
-  cursor: pointer;          /* pointer on hover */
+  border: 2px solid #333; 
+  border-radius: 8px;
+  padding: 8px 16px;
+  background-color: white;
+  cursor: pointer;
 }
 button:hover {
-  background-color: #ffffffff; /* subtle hover effect */
+  background-color: #ffffffff; 
 }
 h1{
   color:aqua;

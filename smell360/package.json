@@ -48,6 +48,7 @@
 		"svelte"
 	],
 	"dependencies": {
+		"firebase": "^12.3.0",
 		"sv-popup": "^0.5.3"
 	}
 }
