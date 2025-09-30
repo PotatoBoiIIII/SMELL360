@@ -47,10 +47,10 @@
     marker.remove()
   }
   function openModal(content,ide,col, mark){
-    modalOpen=!modalOpen;
-    modalOpen=modalOpen;
-    modalContent=content;
-    id=ide;
+    modalOpen=!modalOpen
+    modalOpen=modalOpen
+    modalContent=content
+    id=ide
     color = col
     marker = mark;
     marker = marker;
