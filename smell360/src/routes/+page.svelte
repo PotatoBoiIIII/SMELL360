@@ -27,7 +27,7 @@
     
   ];
   let id = $state("");
-  let keys=$state();
+  let keys = $state()
 
 
 
@@ -62,12 +62,14 @@
   
   onMount(async () => {
     
-    await onValue(ref(db.db, 'markers/'), (snapshot) => {
+    await onValue(ref(db.db, 'markers'), (snapshot) => {
       const data = snapshot.val();
+      keys=Object.keys(data)
       data2=data
       data2=data2
-      let key = Object.keys(data);
-      keys=key;
+      console.log(data2)
+      console.log("keys: "+keys)
+      
       keys=keys
     });
      
@@ -90,6 +92,7 @@
           .addTo(map);
         marker = userMarker;
         setupMapClickListener();
+        console.log(keys)
         keys.forEach(key=>{
           const newMark = new maplibregl.Marker({color: data2[key]?.marker?.color})
             .setLngLat([data2[key]?.marker?.longitude, data2[key]?.marker?.latitude])
