@@ -62,16 +62,7 @@
   
   onMount(async () => {
     
-    await onValue(ref(db.db, 'markers'), (snapshot) => {
-      const data = snapshot.val();
-      keys=Object.keys(data)
-      data2=data
-      data2=data2
-      console.log(data2)
-      console.log("keys: "+keys)
-      
-      keys=keys
-    });
+    
      
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
@@ -92,20 +83,33 @@
           .addTo(map);
         marker = userMarker;
         setupMapClickListener();
-        console.log(keys)
-        keys.forEach(key=>{
-          const newMark = new maplibregl.Marker({color: data2[key]?.marker?.color})
-            .setLngLat([data2[key]?.marker?.longitude, data2[key]?.marker?.latitude])
-            .addTo(map);
-          const markerElement = newMark.getElement();
-          markerElement.id = key;
-      
-          markerElement.addEventListener('click', (event) => {
-            event.stopPropagation();
-            const content = `Marker at [${data2[key]?.marker?.longitude.toFixed(4)}, ${data2[key]?.marker?.latitude.toFixed(4)}]`;
-            openModal(content, markerElement.id, markerColor, newMark);
-          });   
+        onValue(ref(db.db, 'markers'), (snapshot) => {
+            const data = snapshot.val();
+            keys=Object.keys(data)
+            data2=data
+            data2=data2
+            console.log(data2)
+            console.log("keys: "+keys)
+            
+            keys=keys
+
+
+            keys.forEach(key=>{
+              const newMark = new maplibregl.Marker({color: data2[key]?.marker?.color})
+                .setLngLat([data2[key]?.marker?.longitude, data2[key]?.marker?.latitude])
+                .addTo(map);
+              const markerElement = newMark.getElement();
+              markerElement.id = key;
+          
+              markerElement.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const content = `Marker at [${data2[key]?.marker?.longitude.toFixed(4)}, ${data2[key]?.marker?.latitude.toFixed(4)}]`;
+                openModal(content, markerElement.id, markerColor, newMark);
+              });   
         })
+        });
+        console.log(keys)
+        
         
       },
       (error) => {
