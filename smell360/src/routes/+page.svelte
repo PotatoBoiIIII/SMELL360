@@ -1,5 +1,5 @@
   <script>
-  import maplibregl from 'maplibre-gl';
+  import maplibregl, { NavigationControl } from 'maplibre-gl';
   import { onMount } from 'svelte';
   import Modal from '../lib/Modal.svelte'
   import 'maplibre-gl/dist/maplibre-gl.css';
@@ -22,6 +22,7 @@
   let report =$state('');
   let currentlongitude;
   let currentlatitude;
+  let topButtons = true;
   let openSearch = $state(false);
   let markers = [
     
@@ -63,11 +64,11 @@
   onMount(async () => {
     
     await onValue(ref(db.db, 'markers/'), (snapshot) => {
-      const data = snapshot.val();
-      data2=data
-      data2=data2
-      let key = Object.keys(data);
-      keys=key;
+      const data = snapshot.val()
+      data2=data;
+      data2=data2;
+      let key = Object.keys(data)
+      keys=key
       keys=keys
     });
      
@@ -84,6 +85,8 @@
           center: [currentlongitude, currentlatitude],
           zoom: 12
         });
+        let nav = new maplibregl.NavigationControl();
+        map.addControl(nav, 'top-left');
 
         const userMarker = new maplibregl.Marker({ color: "#00008B" })
           .setLngLat([currentlongitude, currentlatitude])
@@ -240,7 +243,7 @@
     </div>
     <div>
       <Label for="phone" class="mb-2">Phone number</Label>
-      <Input type="tel" id="phone" placeholder="123-45-678" pattern={"[0-9]{3}-[0-9]{2}-[0-9]{3}"} required />
+      <Input type="tel" id="phone" placeholder="123-456-7890" pattern={"[0-9]{3}-[0-9]{3}-[0-9]{4}"} required />
     </div>
   </div>
   <div class="mb-6">
@@ -263,32 +266,60 @@
 
   
 </Modal> 
-<div  style="display:flex; justify-content: space-around;">
+  let showMenu = $state(false); // Add this near your other state declarations
 
-<Modal bind:showModal = {openSearch}>
-  <button style="color:blueviolet;padding:2px;margin:10px 10px"
-  > Disturbance </button>
-  <button style="color:blueviolet;padding:2px;margin:10px 10px"> Event </button>
-  <button style="color:blueviolet;padding:2px;margin:10px 10px"> Crime </button>
-</Modal>
-<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew' }; margin:10px 10px"
-onclick={() => (markerColor="#00FFFF")}> Disturbance </button>
-<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#000000' ? '#000000' : 'honeydew' }; margin:10px 10px"
-onclick={() => (markerColor="#000000")}> Event </button>
-<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
-onclick={() => (markerColor="#FF0000")}> Crime </button>
-<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#0000FF' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
-onclick={() => (openSearch = true)}> Search for button</button>
-<h1 style="color: dimgrey; font-family: sans-serif; font-size:large; text-align:right;">
-  SMELL360
-</h1>
+<!-- Toggle Dropdown Button -->
+<div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+  <button onclick={() => (showMenu = !showMenu)} style="font-size: 20px;">
+    {#if showMenu}
+      ▲ Hide Menu
+    {:else}
+      ▼ Show Menu
+    {/if}
+  </button>
 </div>
+
+<!-- Dropdown Menu Overlay -->
+{#if showMenu}
+  <div style="position: absolute; top: 50px; right: 10px; z-index: 10; background: white; padding: 10px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 8px;">
+    <button style="background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew'}"
+      onclick={() => (markerColor = "#00FFFF")}>Disturbance</button>
+
+    <button style="background-color:{markerColor==='#000000' ? '#000000' : 'honeydew'}"
+      onclick={() => (markerColor = "#000000")}>Event</button>
+
+    <button style="background-color:{markerColor==='#FF0000' ? '#FF0000' : 'honeydew'}"
+      onclick={() => (markerColor = "#FF0000")}>Crime</button>
+
+    <button style="background-color:honeydew;" onclick={() => (openSearch = true)}>Search</button>
+  </div>
+{/if}
+
+<!-- Optional branding (outside dropdown) -->
+<div style="position: absolute; top: 10px; left: 10px; z-index: 10;">
+  <h1 style="color: dimgrey; font-family: sans-serif; font-size:large;">
+    SMELL360
+  </h1>
+</div>
+
 <style>
   #map {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    z-index: 0;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
     width: 100%;
-    height: 800px;
-    border: 4px solid #333; 
-    border-radius: 12px;  
   }
   #maplibregl-marker {
   background-image: url('https://cdn.maptiler.com/maplibre-gl-js/v1.15.2/img/marker-icon.png');
@@ -313,4 +344,4 @@ h1{
 
 </style>
 
-<div bind:this={mapContainer} id="map"></div>
+<div bind:this={mapContainer} id="map" style = position:relative></div>
