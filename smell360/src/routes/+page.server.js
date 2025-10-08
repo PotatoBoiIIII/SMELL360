@@ -26,15 +26,19 @@ export const actions = {
 		// some code
 		const data = await request.formData();
 		console.log("data retrived")
-
+		console.log(typeof data.get("markerId"))
+		const id = data.get('markerId')?.toString()
 		const first = data.get('firstName')?.toString()
 		const last = data.get('lastName')?.toString()
-		const author = first+last
-		update(ref(db.db), {
+		const title = data.get("Title")?.toString()
+		const description = data.get("Description")?.toString()
+		const author = first+" "+last
+		console.log("id:"+id)
+		update(ref(db.db,'markers/'+id), {
 
 			author: author,
-
-			text: "Hello Firebase!"
+			title: title,
+			description: description,
 
 		})
 		

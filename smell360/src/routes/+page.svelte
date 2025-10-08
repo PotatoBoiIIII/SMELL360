@@ -28,7 +28,7 @@
     
   ];
   let id = $state("");
-  let keys=$state();
+  let keys = $state()
 
 
 
@@ -81,7 +81,7 @@
 
         map = new maplibregl.Map({
           container: mapContainer,
-          style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=F7nv5KBARzvXCzTOadTH',
+          style: 'https://api.maptiler.com/maps/0199ab53-2bc6-7d40-8832-7f940b951e80/style.json?key=F7nv5KBARzvXCzTOadTH',
           center: [currentlongitude, currentlatitude],
           zoom: 12
         });
@@ -93,19 +93,33 @@
           .addTo(map);
         marker = userMarker;
         setupMapClickListener();
-        keys.forEach(key=>{
-          const newMark = new maplibregl.Marker({color: data2[key]?.marker?.color})
-            .setLngLat([data2[key]?.marker?.longitude, data2[key]?.marker?.latitude])
-            .addTo(map);
-          const markerElement = newMark.getElement();
-          markerElement.id = key;
-      
-          markerElement.addEventListener('click', (event) => {
-            event.stopPropagation();
-            const content = `Marker at [${data2[key]?.marker?.longitude.toFixed(4)}, ${data2[key]?.marker?.latitude.toFixed(4)}]`;
-            openModal(content, markerElement.id, markerColor, newMark);
-          });   
+        onValue(ref(db.db, 'markers'), (snapshot) => {
+            const data = snapshot.val();
+            keys=Object.keys(data)
+            data2=data
+            data2=data2
+            console.log(data2)
+            console.log("keys: "+keys)
+            
+            keys=keys
+
+
+            keys.forEach(key=>{
+              const newMark = new maplibregl.Marker({color: data2[key]?.marker?.color})
+                .setLngLat([data2[key]?.marker?.longitude, data2[key]?.marker?.latitude])
+                .addTo(map);
+              const markerElement = newMark.getElement();
+              markerElement.id = key;
+          
+              markerElement.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const content = `Marker at [${data2[key]?.marker?.longitude.toFixed(4)}, ${data2[key]?.marker?.latitude.toFixed(4)}]`;
+                openModal(content, markerElement.id, markerColor, newMark);
+              });   
         })
+        });
+        console.log(keys)
+        
         
       },
       (error) => {
@@ -113,12 +127,38 @@
 
         map = new maplibregl.Map({
           container: mapContainer,
-          style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=F7nv5KBARzvXCzTOadTH',
+          style: 'https://api.maptiler.com/maps/0199ab53-2bc6-7d40-8832-7f940b951e80/style.json?key=F7nv5KBARzvXCzTOadTH',
           center: [0, 0],
           zoom: 2
         });
 
         setupMapClickListener();
+        onValue(ref(db.db, 'markers'), (snapshot) => {
+            const data = snapshot.val();
+            keys=Object.keys(data)
+            data2=data
+            data2=data2
+            console.log(data2)
+            console.log("keys: "+keys)
+            
+            keys=keys
+
+
+            keys.forEach(key=>{
+              const newMark = new maplibregl.Marker({color: data2[key]?.marker?.color})
+                .setLngLat([data2[key]?.marker?.longitude, data2[key]?.marker?.latitude])
+                .addTo(map);
+              const markerElement = newMark.getElement();
+              markerElement.id = key;
+          
+              markerElement.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const content = `Marker at [${data2[key]?.marker?.longitude.toFixed(4)}, ${data2[key]?.marker?.latitude.toFixed(4)}]`;
+                openModal(content, markerElement.id, markerColor, newMark);
+              });   
+        })
+        });
+        console.log(keys)
       },
       {
         enableHighAccuracy: true,
@@ -126,18 +166,7 @@
         maximumAge: 0,
       }
     );
-  } else {
-    console.error("Geolocation not available");
-
-    map = new maplibregl.Map({
-      container: mapContainer,
-      style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=F7nv5KBARzvXCzTOadTH',
-      center: [0, 0],
-      zoom: 2
-    });
-
-    setupMapClickListener();
-  }
+  } 
 
   function setupMapClickListener() {
     
@@ -163,18 +192,18 @@
       const newPostRef = push(postListRef);
       const key = newPostRef.key;
       set(newPostRef, {
-          color:"color3",
           marker: {
             color: markerColor,
             latitude: lat,
             longitude: lng,
+            
 
           }
       });
       markerColor = "";
       markerColor=markerColor;
       markerElement.id = key;
-      
+      id=key;
       markerElement.addEventListener('click', (event) => {
         event.stopPropagation();
         const content = `Marker at [${lng.toFixed(4)}, ${lat.toFixed(4)}]`;
@@ -196,11 +225,12 @@
 <Modal bind:showModal={modalOpen}>
   
   {#snippet header()}
+  
 		<h2>
-			{modalContent} color: {JSON.stringify(data2[id])}
+			data: {JSON.stringify(data2[id])}
 		</h2>
     <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger;">
-      Author: 
+      Author: {data2[id]?.author}
  
     </h1>
     
@@ -222,20 +252,26 @@
       ID: {id}
  
     </h1>
+     <h1>
+      Title: {data2[id]?.title}
+    </h1>
+    <h1>
+      Description: {data2[id]?.description}
+    </h1>
+   
     <button style="width:80px; height:35px;" onclick={()=> removeModal()}>remove</button>
 	{/snippet}
 
 </Modal>
-{#if form?.success}
-  <p>{form?.message}</p>
-{/if}
+
 <Modal bind:showModal={openPost}>
 
 <form  method="POST" action="?/login">
+  <Input type="hidden" name="markerId" value={id} />
   <div class="mb-6 grid gap-6 md:grid-cols-2">
     <div>
       <Label for="first_name" class="mb-2">First name</Label>
-      <Input name = 'firstName' type="text" id="first_name" placeholder="John" required />
+      <Input name = 'firstName' type="text" id="first_name" placeholder={id} required />
     </div>
     <div>
       <Label for="last_name" class="mb-2">Last name</Label>
@@ -258,6 +294,15 @@
     <Label for="confirm_password" class="mb-2">Confirm password</Label>
     <Input name = "confirmPassword" type="password" id="confirm_password" placeholder="•••••••••" required />
   </div>
+  <div class="mb-6">
+    <Label for="Title" class="mb-2">Title</Label>
+    <Input name = "Title" type="text" id="Title" placeholder="Title" required />
+  </div>
+   <div class="mb-6">
+    <Label for="Description" class="mb-2">Description</Label>
+    <Input name = "Description" type="text" id="Description" placeholder="Description" required />
+  </div>
+  
   <Checkbox classes={{ div: "mb-6 gap-1 rtl:space-x-reverse" }} required>
     I agree with the <A href="/" class="text-primary-700 dark:text-primary-600 hover:underline">terms and conditions</A>.
   </Checkbox>
