@@ -233,13 +233,11 @@
   
 </script>
 
-<Modal bind:showModal={modalOpen}>
+<Modal bind:showModal={modalOpen} >
   
   {#snippet header()}
-      <img src = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=AIzaSyAH1PXcfmpInzokznuBIgVQfIUvI_5IDa8">
-		<h2>
-			data: {JSON.stringify(data2[id])}
-		</h2>
+      <img src = "https://maps.googleapis.com/maps/api/streetview?size=600x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=AIzaSyASmo2E3RcGT6wzLrt3ceXYUBVyv9SR2HU">
+		
     <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger;">
       Author: {data2[id]?.author}
  
@@ -349,7 +347,10 @@ onclick={() => (openSearch = true)}> Search for button</button>
     margin: 0;
     padding: 0;
   }
-  #post{
+  img{
+    border-radius: 5%;
+  }
+  .post{
     height:100vh;
   }
   #mapWrapper {
@@ -360,6 +361,7 @@ onclick={() => (openSearch = true)}> Search for button</button>
     height: 100vh;
     border: 4px solid #333; 
     border-radius: 12px;  
+    overflow:hidden
   }
   #maplibregl-marker {
   background-image: url('https://cdn.maptiler.com/maplibre-gl-js/v1.15.2/img/marker-icon.png');
@@ -384,8 +386,11 @@ h1{
 #mapContainer{
   height:100%
 }
+h2{
+  max-width: 100vw;
+}
 
 </style>
-<div id="mapWrapper" style="height: 100%;">
+<div id="mapWrapper" style="height: 100%;padding:50">
   <div bind:this={mapContainer} id="map" style = "height:85vh; width:98vw"></div>
 </div>

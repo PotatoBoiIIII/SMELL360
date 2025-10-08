@@ -19,7 +19,7 @@
 	onclose={() => (showModal = false)}
 	onclick={(e) => { if (e.target === dialog) dialog.close(); }}
 >
-	<div style="height: 800px; width:500px">
+	<div style="height: 80vh; width:50vw;">
 		{@render header?.()}
 		<hr />
 		{@render children?.()}
@@ -29,41 +29,53 @@
 </dialog>
 
 <style>
-	dialog {
-		max-width: 100em;
-		border-radius: 0.2em;
-		border: none;
-		padding: 100px;
+  :global(dialog) {
+    max-width: 100em;
+    width: 50vw;
+    border-radius: 0.2em;
+    border: none;
+    padding: 30px;
+    background: black;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+	overflow-x:hidden;
+	scrollbar-width: none;
+  }
+  
+	:global(dialog)::-webkit-scrollbar {
+  		display: none; /* Chrome, Safari, Edge */
 	}
-	dialog::backdrop {
-		background: rgba(0, 0, 0, 0.3);
-	}
-	dialog > div {
-		padding: 1em;
-	}
-	dialog[open] {
-		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-	}
-	@keyframes zoom {
-		from {
-			transform: scale(0.95);
-		}
-		to {
-			transform: scale(1);
-		}
-	}
-	dialog[open]::backdrop {
-		animation: fade 0.2s ease-out;
-	}
-	@keyframes fade {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-	button {
-		display: block;
-	}
+  :global(dialog::backdrop) {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    animation: fade 0.2s ease-out;
+  }
+  :global(dialog > div) {
+    padding: 1.5em;
+    background: #000000;
+    border-radius: 0.2em;
+    box-sizing: border-box;
+  }
+  :global(button) {
+    display: block;
+    margin: 1em auto 0 auto;
+    padding: 0.5em 1.2em;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 0.3em;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+  }
+  :global(button:hover) {
+    background-color: #0056b3;
+  }
+  @media (max-width: 600px) {
+    :global(dialog) {
+      width: 90vw;
+      padding: 20px;
+    }
+  }
 </style>
