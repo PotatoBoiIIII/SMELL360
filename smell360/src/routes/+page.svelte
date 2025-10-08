@@ -1,5 +1,5 @@
   <script>
-  import maplibregl, { NavigationControl } from 'maplibre-gl';
+  import maplibregl from 'maplibre-gl';
   import { onMount } from 'svelte';
   import Modal from '../lib/Modal.svelte'
   import 'maplibre-gl/dist/maplibre-gl.css';
@@ -94,8 +94,7 @@
           center: [currentlongitude, currentlatitude],
           zoom: 12
         });
-        let nav = new maplibregl.NavigationControl();
-        map.addControl(nav, 'top-left');
+     
 
         const userMarker = new maplibregl.Marker({ color: "#00008B" })
           .setLngLat([currentlongitude, currentlatitude])
@@ -323,40 +322,25 @@
 
   
 </Modal> 
-  let showMenu = $state(false); // Add this near your other state declarations
+  <div  style="display:flex; justify-content: space-around;">
 
-<!-- Toggle Dropdown Button -->
-<div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-  <button onclick={() => (showMenu = !showMenu)} style="font-size: 20px;">
-    {#if showMenu}
-      ▲ Hide Menu
-    {:else}
-      ▼ Show Menu
-    {/if}
-  </button>
-</div>
-
-<!-- Dropdown Menu Overlay -->
-{#if showMenu}
-  <div style="position: absolute; top: 50px; right: 10px; z-index: 10; background: white; padding: 10px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 8px;">
-    <button style="background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew'}"
-      onclick={() => (markerColor = "#00FFFF")}>Disturbance</button>
-
-    <button style="background-color:{markerColor==='#000000' ? '#000000' : 'honeydew'}"
-      onclick={() => (markerColor = "#000000")}>Event</button>
-
-    <button style="background-color:{markerColor==='#FF0000' ? '#FF0000' : 'honeydew'}"
-      onclick={() => (markerColor = "#FF0000")}>Crime</button>
-
-    <button style="background-color:honeydew;" onclick={() => (openSearch = true)}>Search</button>
-  </div>
-{/if}
-
-<!-- Optional branding (outside dropdown) -->
-<div style="position: absolute; top: 10px; left: 10px; z-index: 10;">
-  <h1 style="color: dimgrey; font-family: sans-serif; font-size:large;">
-    SMELL360
-  </h1>
+<Modal bind:showModal = {openSearch}>
+  <button style="color:blueviolet;padding:2px;margin:10px 10px"
+  > Disturbance </button>
+  <button style="color:blueviolet;padding:2px;margin:10px 10px"> Event </button>
+  <button style="color:blueviolet;padding:2px;margin:10px 10px"> Crime </button>
+</Modal>
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew' }; margin:10px 10px"
+onclick={() => (markerColor="#00FFFF")}> Disturbance </button>
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#000000' ? '#000000' : 'honeydew' }; margin:10px 10px"
+onclick={() => (markerColor="#000000")}> Event </button>
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
+onclick={() => (markerColor="#FF0000")}> Crime </button>
+<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#0000FF' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
+onclick={() => (openSearch = true)}> Search for button</button>
+<h1 style="color: dimgrey; font-family: sans-serif; font-size:large; text-align:right;">
+  SMELL360
+</h1>
 </div>
 
 <style>
@@ -365,7 +349,9 @@
     margin: 0;
     padding: 0;
   }
-
+  #post{
+    height:100vh;
+  }
   #mapWrapper {
     height: 100%;
   }
