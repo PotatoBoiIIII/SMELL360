@@ -28,7 +28,7 @@
   ];
   let id = $state("");
   let keys = $state()
-
+  let allMarkers = []
 
 
   
@@ -59,7 +59,16 @@
     author = markerColor;
   } 
   
-  
+  function filterMarkersByColor(selectedColor) {
+    allMarkers.forEach(({ marker, color }) => {
+      const el = marker.getElement();
+      if (color === selectedColor || selectedColor === 'all') {
+        el.style.display = 'block';
+      } else {
+        el.style.display = 'none';
+      }
+    });
+  }
   onMount(async () => {
     
     
@@ -98,6 +107,7 @@
               const newMark = new maplibregl.Marker({color: data2[key]?.marker?.color})
                 .setLngLat([data2[key]?.marker?.longitude, data2[key]?.marker?.latitude])
                 .addTo(map);
+              allMarkers.push({ marker, color: data2[key]?.marker?.color });
               const markerElement = newMark.getElement();
               markerElement.id = key;
           
@@ -107,8 +117,10 @@
                 openModal(content, markerElement.id, markerColor, newMark);
               });   
         })
+        filterMarkersByColor('#000000')
         });
         console.log(keys)
+        
         
         
       },
@@ -215,7 +227,7 @@
 <Modal bind:showModal={modalOpen}>
   
   {#snippet header()}
-  
+      <img src = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=AIzaSyAH1PXcfmpInzokznuBIgVQfIUvI_5IDa8">
 		<h2>
 			data: {JSON.stringify(data2[id])}
 		</h2>
@@ -318,9 +330,18 @@ onclick={() => (openSearch = true)}> Search for button</button>
 </h1>
 </div>
 <style>
+  html, body, #svelte {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  #mapWrapper {
+    height: 100%;
+  }
   #map {
-    width: 100%;
-    height: 800px;
+    width: 100vw;
+    height: 100vh;
     border: 4px solid #333; 
     border-radius: 12px;  
   }
@@ -344,7 +365,11 @@ button:hover {
 h1{
   color:aqua;
 }
+#mapContainer{
+  height:100%
+}
 
 </style>
-
-<div bind:this={mapContainer} id="map"></div>
+<div id="mapWrapper" style="height: 100%;">
+  <div bind:this={mapContainer} id="map" style = "height:85vh; width:98vw"></div>
+</div>
