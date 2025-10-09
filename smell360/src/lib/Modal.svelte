@@ -23,7 +23,7 @@
 		{@render header?.()}
 		<hr />
 		{@render children?.()}
-		<hr />
+	
 		<button autofocus onclick={() => dialog.close()}>close modal</button>
 	</div>
 </dialog>
@@ -39,6 +39,8 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
+    height:85vh;
+    border-radius:5%;
 	overflow-x:hidden;
 	scrollbar-width: none;
   }
@@ -62,7 +64,7 @@
     margin: 1em auto 0 auto;
     padding: 0.5em 1.2em;
     background-color: #007BFF;
-    color: white;
+    color: rgb(254, 252, 252);
     border: none;
     border-radius: 0.3em;
     cursor: pointer;

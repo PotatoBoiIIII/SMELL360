@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics"; // <-- Import isSupported
 import { getDatabase } from "firebase/database";
+import { getStorage } from "firebase/storage";
 import { browser } from '$app/environment'; // <-- Import 'browser' from SvelteKit
 
 // Your web app's Firebase configuration
@@ -19,7 +20,7 @@ const firebaseConfig = {
 
 // Initialize Firebase App always (it's safe for both SSR and client)
 const app = initializeApp(firebaseConfig);
-
+const storage = getStorage(app);
 // Initialize Analytics ONLY if in the browser and analytics is supported
 let analytics;
 if (browser) { // <-- Check if running in the browser
@@ -38,4 +39,4 @@ if (browser) { // <-- Check if running in the browser
 const db = getDatabase(app);
 
 // Export the instances
-export default { app, analytics, db };
+export default { app, analytics, db, storage };

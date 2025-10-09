@@ -6,6 +6,10 @@
   import { Input, Label, Button, Checkbox, A } from "flowbite-svelte";
   import { getDatabase, ref, child, push, update, set,query,get,onValue, remove } from "firebase/database";  
   import db from '$lib/firebase.js'
+  import storage from '$lib/firebase.js'
+  import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+  import { ref as dbRef } from "firebase/database";
+
   /** @type {import('./$types').PageProps} */
 	let { data, form } = $props();
   let map;
@@ -31,12 +35,41 @@
   let keys = $state()
   let allMarkers = []
 
-
+  let file;
   
   // let name = '';
 
   // openPost = false;
+  function handleFileChange(event) {
+    file = event.target.files[0];
+  }
+  async function uploadImage() {
+    if (!file) return alert("Please select a file.");
 
+    try {
+      const imageRef = storageRef(storage.storage, `images/${file.name}`);
+
+      // Upload file to Firebase Storage
+      await uploadBytes(imageRef, file);
+
+      // Get the download URL
+      const url = await getDownloadURL(imageRef);
+
+      // Save the URL and some metadata to Realtime Database
+      const imagesRef = dbRef(db.db, "images");
+      const newImageRef = push(imagesRef);
+      await set(newImageRef, {
+        url,
+        name: file.name,
+        createdAt: Date.now()
+      });
+
+      alert("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Upload failed", error);
+      alert("Failed to upload image.");
+    }
+  }
   function openModalPost(col){
     openPost = !openPost;
     markerColor= col;
@@ -236,15 +269,16 @@
 <Modal bind:showModal={modalOpen} >
   
   {#snippet header()}
-      <img src = "https://maps.googleapis.com/maps/api/streetview?size=600x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=AIzaSyASmo2E3RcGT6wzLrt3ceXYUBVyv9SR2HU">
+      
 		
-    <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger;">
-      Author: {data2[id]?.author}
+    <h1 class = 'postAuthor'>
+      {data2[id]?.author}
  
     </h1>
-    
-    <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:larger">
-      Type:
+    <img src = "https://maps.googleapis.com/maps/api/streetview?size=600x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=AIzaSyASmo2E3RcGT6wzLrt3ceXYUBVyv9SR2HU">
+    <h1></h1>
+    <h1 style="color: {data2[id]?.marker?.color}; font-family: 'Roboto'; font-size:larger;border-width:5px; border-color:white;background-color:white;border-style:solid;border-radius:5px;display: inline-block">
+      
       {#if data2[id]?.marker?.color==="#00FFFF"}
         Disturbance
       {/if}
@@ -257,19 +291,14 @@
       
  
     </h1>
-    <h1 style="color: dimgrey; font-family: 'Roboto'; font-size:large;">
-      ID: {id}
- 
-    </h1>
-     <h1>
-      Title: {data2[id]?.title}
-    </h1>
+     
     <h1>
-      Description: {data2[id]?.description}
+       {data2[id]?.description}
     </h1>
    
-    <button style="width:80px; height:35px;" onclick={()=> removeModal()}>remove</button>
+    
 	{/snippet}
+  <button style="width:80px; height:35px;" onclick={()=> removeModal()}>remove</button>
 
 </Modal>
 
@@ -311,11 +340,13 @@
     <Label for="Description" class="mb-2">Description</Label>
     <Input name = "Description" type="text" id="Description" placeholder="Description" required />
   </div>
-  
+ <input type="file" onchange={(e) => file = e.target.files[0]} />
+
+
   <Checkbox classes={{ div: "mb-6 gap-1 rtl:space-x-reverse" }} required>
     I agree with the <A href="/" class="text-primary-700 dark:text-primary-600 hover:underline">terms and conditions</A>.
   </Checkbox>
-  <button formaction = "?/register">Submit</button>
+  <button onclick={()=> uploadImage} formaction = "?/register">Submit</button>
 </form>
 
   
@@ -373,15 +404,28 @@ onclick={() => (openSearch = true)}> Search for button</button>
 button {
   border: 2px solid #333; 
   border-radius: 8px;
-  padding: 8px 16px;
-  background-color: white;
+  padding:8px;
+  background-color: rgb(0, 0, 0);
   cursor: pointer;
 }
 button:hover {
-  background-color: #ffffffff; 
+  background-color: rgb(108, 90, 90); 
 }
 h1{
-  color:aqua;
+  color:#0056b3;
+  border-width:5px;
+  border-color:white;
+  padding:5;
+  text-align:center;
+}
+.postAuthor{
+  padding:5px;
+  color: white; 
+  font-family: 'Roboto'; 
+  font-size:large;
+  font-weight:bold;
+  text-align:left;
+
 }
 #mapContainer{
   height:100%
