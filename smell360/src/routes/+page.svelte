@@ -124,7 +124,7 @@
 
         map = new maplibregl.Map({
           container: mapContainer,
-          style: 'https://api.maptiler.com/maps/0199ab53-2bc6-7d40-8832-7f940b951e80/style.json?key=F7nv5KBARzvXCzTOadTH',
+          style: 'https://api.maptiler.com/maps/0199ca5b-cbe0-79a2-b4ef-d47e198081cf/style.json?key=GLcvFRENuNlnOWDeYOOi',
           center: [currentlongitude, currentlatitude],
           zoom: 12
         });
@@ -172,7 +172,7 @@
 
         map = new maplibregl.Map({
           container: mapContainer,
-          style: 'https://api.maptiler.com/maps/0199ab53-2bc6-7d40-8832-7f940b951e80/style.json?key=F7nv5KBARzvXCzTOadTH',
+          style: 'hhttps://api.maptiler.com/maps/0199ca5b-cbe0-79a2-b4ef-d47e198081cf/style.json?key=GLcvFRENuNlnOWDeYOOi',
           center: [0, 0],
           zoom: 2
         });
