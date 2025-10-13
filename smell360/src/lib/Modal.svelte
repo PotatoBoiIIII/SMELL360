@@ -34,7 +34,7 @@
     width: 50vw;
     border-radius: 0.2em;
     border: none;
-    padding: 30px;
+    padding: 10px;
     background: black;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

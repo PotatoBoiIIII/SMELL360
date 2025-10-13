@@ -56,9 +56,10 @@
       const url = await getDownloadURL(imageRef);
 
       // Save the URL and some metadata to Realtime Database
-      const imagesRef = dbRef(db.db, "images");
-      const newImageRef = push(imagesRef);
-      await set(newImageRef, {
+      const imagesRef = dbRef(db.db, "markers/"+id+"/image"
+      );
+      
+      await set(imagesRef, {
         url,
         name: file.name,
         createdAt: Date.now()
@@ -270,14 +271,15 @@
   
   {#snippet header()}
       
-		
+		<div class = "post">
     <h1 class = 'postAuthor'>
       {data2[id]?.author}
  
     </h1>
-    <img src = "https://maps.googleapis.com/maps/api/streetview?size=600x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=AIzaSyASmo2E3RcGT6wzLrt3ceXYUBVyv9SR2HU">
-    <h1></h1>
-    <h1 style="color: {data2[id]?.marker?.color}; font-family: 'Roboto'; font-size:larger;border-width:5px; border-color:white;background-color:white;border-style:solid;border-radius:5px;display: inline-block">
+    <img src = "{data2[id]?.image?.url}">
+    <!-- <img src = "https://maps.googleapis.com/maps/api/streetview?size=600x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=API_KEY"> -->
+    <div class = "descriptionBox">
+    <h1 style="color: {data2[id]?.marker?.color}; font-family: 'Roboto'; font-size:larger;border-width:5px; border-color:white;background-color:white;border-style:solid;border-radius:5px;display: inline-block;flex: 0 0 auto">
       
       {#if data2[id]?.marker?.color==="#00FFFF"}
         Disturbance
@@ -291,11 +293,11 @@
       
  
     </h1>
-     
-    <h1>
+    <h1 class = 'description'>
        {data2[id]?.description}
     </h1>
-   
+    </div>
+   </div>
     
 	{/snippet}
   <button style="width:80px; height:35px;" onclick={()=> removeModal()}>remove</button>
@@ -314,10 +316,6 @@
     <div>
       <Label for="last_name" class="mb-2">Last name</Label>
       <Input name = 'lastName' type="text" id="last_name" placeholder="Doe" required />
-    </div>
-    <div>
-      <Label for="phone" class="mb-2">Phone number</Label>
-      <Input type="tel" id="phone" placeholder="123-456-7890" pattern={"[0-9]{3}-[0-9]{3}-[0-9]{4}"} required />
     </div>
   </div>
   <div class="mb-6">
@@ -346,7 +344,7 @@
   <Checkbox classes={{ div: "mb-6 gap-1 rtl:space-x-reverse" }} required>
     I agree with the <A href="/" class="text-primary-700 dark:text-primary-600 hover:underline">terms and conditions</A>.
   </Checkbox>
-  <button onclick={()=> uploadImage} formaction = "?/register">Submit</button>
+  <button onclick={()=> uploadImage()} formaction = "?/register">Submit</button>
 </form>
 
   
@@ -380,12 +378,28 @@ onclick={() => (openSearch = true)}> Search for button</button>
   }
   img{
     border-radius: 5%;
+    max-width:100vw;
+    max-height:50vh
+  }
+  .descriptionBox{
+    background-color:grey;
+    border-radius:5px;
+    display:flex;
+    flex-direction:row;
   }
   .post{
     height:100vh;
+    padding:3px
   }
   #mapWrapper {
     height: 100%;
+  }
+  .description{
+    background-color:grey;
+    color:#0056b3;
+    border-radius:3px;
+    height:20vh;
+    max-width:90vw
   }
   #map {
     width: 100vw;
@@ -422,9 +436,14 @@ h1{
   padding:5px;
   color: white; 
   font-family: 'Roboto'; 
-  font-size:large;
+  font-size:x-large;
   font-weight:bold;
   text-align:left;
+  border-style:solid;
+  border-width:4px;
+  border-color:white;
+  border-radius:5px;
+  padding: 5px;
 
 }
 #mapContainer{
