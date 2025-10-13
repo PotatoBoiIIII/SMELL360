@@ -284,7 +284,7 @@
       {#if data2[id]?.marker?.color==="#00FFFF"}
         Disturbance
       {/if}
-      {#if data2[id]?.marker?.color==="#000000"}
+      {#if data2[id]?.marker?.color==="#FF69B4"}
         Event
       {/if}
       {#if data2[id]?.marker?.color==="#FF0000"}
@@ -357,11 +357,11 @@
   <button style="color:blueviolet;padding:2px;margin:10px 10px"> Event </button>
   <button style="color:blueviolet;padding:2px;margin:10px 10px"> Crime </button>
 </Modal>
-<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'honeydew' }; margin:10px 10px"
+<button style="color:white;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'black' }; margin:10px 10px"
 onclick={() => (markerColor="#00FFFF")}> Disturbance </button>
-<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#000000' ? '#000000' : 'honeydew' }; margin:10px 10px"
-onclick={() => (markerColor="#000000")}> Event </button>
-<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
+<button style="color:white;padding:2px;background-color:{markerColor==='#FF69B4' ? '#FF69B4' : 'black' }; margin:10px 10px"
+onclick={() => (markerColor="#FF69B4")}> Event </button>
+<button style="color:white;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'black' }; margin:10px 10px"
 onclick={() => (markerColor="#FF0000")}> Crime </button>
 <button style="color:blueviolet;padding:2px;background-color:{markerColor==='#0000FF' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
 onclick={() => (openSearch = true)}> Search for button</button>
@@ -384,8 +384,9 @@ onclick={() => (openSearch = true)}> Search for button</button>
   .descriptionBox{
     background-color:grey;
     border-radius:5px;
-    display:flex;
-    flex-direction:row;
+    /* display:flexbox; */
+    flex-direction:grid;
+    padding: 15px;
   }
   .post{
     height:100vh;
@@ -444,6 +445,7 @@ h1{
   border-color:white;
   border-radius:5px;
   padding: 5px;
+  display:inline-block
 
 }
 #mapContainer{
