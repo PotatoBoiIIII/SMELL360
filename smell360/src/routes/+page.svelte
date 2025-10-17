@@ -279,7 +279,7 @@
     <img src = "{data2[id]?.image?.url}">
     <!-- <img src = "https://maps.googleapis.com/maps/api/streetview?size=600x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=API_KEY"> -->
     <div class = "descriptionBox">
-    <h1 style="color: {data2[id]?.marker?.color}; font-family: 'Roboto'; font-size:larger;border-width:5px; border-color:white;background-color:white;border-style:solid;border-radius:5px;display: inline-block;flex: 0 0 auto">
+    <h1 style="color: {data2[id]?.marker?.color}; font-family: 'Roboto'; font-size:larger;border-width:5px; border-color:black;background-color:black;border-style:solid;border-radius:5px;display: inline-block;flex: 0 0 auto">
       
       {#if data2[id]?.marker?.color==="#00FFFF"}
         Disturbance
@@ -363,8 +363,7 @@ onclick={() => (markerColor="#00FFFF")}> Disturbance </button>
 onclick={() => (markerColor="#FF69B4")}> Event </button>
 <button style="color:white;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'black' }; margin:10px 10px"
 onclick={() => (markerColor="#FF0000")}> Crime </button>
-<button style="color:blueviolet;padding:2px;background-color:{markerColor==='#0000FF' ? '#FF0000' : 'honeydew' }; margin:10px 10px"
-onclick={() => (openSearch = true)}> Search for button</button>
+
 <h1 style="color: dimgrey; font-family: sans-serif; font-size:large; text-align:right;">
   SMELL360
 </h1>
@@ -382,7 +381,7 @@ onclick={() => (openSearch = true)}> Search for button</button>
     max-height:50vh
   }
   .descriptionBox{
-    background-color:grey;
+    background-color:rgb(72, 72, 72);
     border-radius:5px;
     /* display:flexbox; */
     flex-direction:grid;
@@ -400,7 +399,7 @@ onclick={() => (openSearch = true)}> Search for button</button>
     height: 100%;
   }
   .description{
-    background-color:grey;
+    background-color:rgb(72, 72, 72);
     color:white;
     border-radius:3px;
     height:20vh;
