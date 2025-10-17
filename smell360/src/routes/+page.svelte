@@ -386,7 +386,11 @@ onclick={() => (openSearch = true)}> Search for button</button>
     border-radius:5px;
     /* display:flexbox; */
     flex-direction:grid;
-    padding: 15px;
+    padding-left: 10px;
+    border-style:solid;
+    border-width:3px;
+    border-color:white;
+    
   }
   .post{
     height:100vh;
@@ -397,7 +401,7 @@ onclick={() => (openSearch = true)}> Search for button</button>
   }
   .description{
     background-color:grey;
-    color:#0056b3;
+    color:white;
     border-radius:3px;
     height:20vh;
     max-width:90vw
