@@ -1,6 +1,7 @@
 /** @satisfies {import('./$types').Actions} */
 import db from '$lib/firebase.js'
-import { ref, push,update, remove } from "firebase/database";
+import { ref, push,update, remove,serverTimestamp } from "firebase/database";
+
 
 
 console.log('backend running');
@@ -39,6 +40,7 @@ export const actions = {
 			author: author,
 			title: title,
 			description: description,
+			timestamp: serverTimestamp()
 
 		})
 		

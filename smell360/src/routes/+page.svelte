@@ -93,6 +93,24 @@
     markerColor=markerColor;
     author = markerColor;
   } 
+  function formatTimestamp(timestamp) {
+        if (!timestamp) {
+            return "No date available";
+        }
+
+        const dateObject = new Date(timestamp);
+        
+        const options = {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true 
+        };
+
+        return dateObject.toLocaleString('en-US', options);
+    }
   
   function filterMarkersByColor(selectedColor) {
     allMarkers.forEach(({ marker, color }) => {
@@ -272,27 +290,34 @@
   {#snippet header()}
       
 		<div class = "post">
-    <h1 class = 'postAuthor'>
-      {data2[id]?.author}
- 
+    <div class = 'postAuthor'>
+      <img src = "../../default-Avata.png" style = "background:white;height:1em;width:auto;border-style:solid;border-color:white;border-width:5px;border-radius:3px;vertical-align: middle;">
+      <span class="author-name">
+        {data2[id]?.author}
+      </span>
+       <h1 style="color: {data2[id]?.marker?.color}; font-family:Comic Sans MS, Comic Sans, cursive;  font-size:large;border-width:3px; border-color:white;background-color:black;border-style:solid;border-radius:5px;display: inline-block;flex: 0 0 auto;padding:1px">
+      
+        {#if data2[id]?.marker?.color==="#00FFFF"}
+          Disturbance
+        {/if}
+        {#if data2[id]?.marker?.color==="#FF69B4"}
+          Event
+        {/if}
+        {#if data2[id]?.marker?.color==="#FF0000"}
+          Crime
+        {/if}
+        
+  
+      </h1>
+      <h1 class = "date">
+      {formatTimestamp(data2[id]?.timestamp)}
     </h1>
+    </div>
+    
     <img src = "{data2[id]?.image?.url}">
     <!-- <img src = "https://maps.googleapis.com/maps/api/streetview?size=600x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=API_KEY"> -->
     <div class = "descriptionBox">
-    <h1 style="color: {data2[id]?.marker?.color}; font-family: 'Roboto'; font-size:larger;border-width:5px; border-color:black;background-color:black;border-style:solid;border-radius:5px;display: inline-block;flex: 0 0 auto">
-      
-      {#if data2[id]?.marker?.color==="#00FFFF"}
-        Disturbance
-      {/if}
-      {#if data2[id]?.marker?.color==="#FF69B4"}
-        Event
-      {/if}
-      {#if data2[id]?.marker?.color==="#FF0000"}
-        Crime
-      {/if}
-      
- 
-    </h1>
+   
     <h1 class = 'description'>
        {data2[id]?.description}
     </h1>
@@ -392,7 +417,7 @@ onclick={() => (markerColor="#FF0000")}> Crime </button>
     
   }
   .post{
-    height:100vh;
+    max-height:100vh;
     padding:3px
   }
   #mapWrapper {
@@ -402,7 +427,7 @@ onclick={() => (markerColor="#FF0000")}> Crime </button>
     background-color:rgb(72, 72, 72);
     color:white;
     border-radius:3px;
-    height:20vh;
+    max-height:20vh;
     max-width:90vw
   }
   #map {
@@ -412,13 +437,21 @@ onclick={() => (markerColor="#FF0000")}> Crime </button>
     border-radius: 12px;  
     overflow:hidden
   }
-  #maplibregl-marker {
-  background-image: url('https://cdn.maptiler.com/maplibre-gl-js/v1.15.2/img/marker-icon.png');
-  background-size: cover;
-  width: 30px;
-  height: 40px;
-  cursor: pointer;
-}
+  .date{
+    padding:5px;
+    color: white; 
+    font-family: Comic Sans MS, Comic Sans, cursive; 
+    font-size: medium;
+    font-weight:bold;
+    text-align:left;
+    border-width:4px;
+    border-color:white;
+    border-radius:5px;
+    padding-left: 5px;
+    padding-right:5px;
+    display:inline-block;
+    }
+
 button {
   border: 2px solid #333; 
   border-radius: 8px;
@@ -439,24 +472,22 @@ h1{
 .postAuthor{
   padding:5px;
   color: white; 
-  font-family: 'Roboto'; 
+  font-family: Comic Sans MS, Comic Sans, cursive; 
   font-size:x-large;
   font-weight:bold;
   text-align:left;
-  border-style:solid;
   border-width:4px;
   border-color:white;
   border-radius:5px;
-  padding: 5px;
-  display:inline-block
+  padding-left: 5px;
+  padding-right:5px;
+  display:inline-block;
 
 }
-#mapContainer{
-  height:100%
+.author-name {
+  text-decoration: underline; 
 }
-h2{
-  max-width: 100vw;
-}
+
 
 </style>
 <div id="mapWrapper" style="height: 100%;padding:50">
