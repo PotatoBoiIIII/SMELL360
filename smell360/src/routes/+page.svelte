@@ -312,9 +312,11 @@
       <h1 class = "date">
       {formatTimestamp(data2[id]?.timestamp)}
     </h1>
+ 
+
     </div>
     
-    <img src = "{data2[id]?.image?.url}">
+    <img src = "{data2[id]?.image?.url}" style = "position:left; min-width:20vw">
     <!-- <img src = "https://maps.googleapis.com/maps/api/streetview?size=600x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=API_KEY"> -->
     <div class = "descriptionBox">
    
@@ -418,7 +420,8 @@ onclick={() => (markerColor="#FF0000")}> Crime </button>
   }
   .post{
     max-height:100vh;
-    padding:3px
+    padding:3px;
+    display: block;
   }
   #mapWrapper {
     height: 100%;
@@ -437,6 +440,10 @@ onclick={() => (markerColor="#FF0000")}> Crime </button>
     border-radius: 12px;  
     overflow:hidden
   }
+  .add-break::after {
+  content: "\A";
+  white-space: pre;
+}
   .date{
     padding:5px;
     color: white; 
