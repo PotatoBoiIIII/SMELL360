@@ -40,14 +40,12 @@
   // let name = '';
 
   // openPost = false;
-  function handleFileChange(event) {
-    file = event.target.files[0];
-  }
   async function uploadImage() {
     if (!file) return alert("Please select a file.");
-
     try {
-      const imageRef = storageRef(storage.storage, `images/${file.name}`);
+    const uniqueName = `${Date.now()}_${file.name}`;
+
+      const imageRef = storageRef(storage.storage, `images/${uniqueName}`);
 
       // Upload file to Firebase Storage
       await uploadBytes(imageRef, file);
@@ -70,6 +68,12 @@
       console.error("Upload failed", error);
       alert("Failed to upload image.");
     }
+    file = null;
+    document.getElementById("fileInput").value = "";
+    
+  }
+   function handleFileChange(e) {
+    file = e.target.files[0];
   }
   function openModalPost(col){
     openPost = !openPost;
@@ -178,7 +182,8 @@
                 openModal(content, markerElement.id, markerColor, newMark);
               });   
         })
-        filterMarkersByColor('#000000')
+        
+        
         });
         console.log(keys)
         
@@ -365,7 +370,7 @@
     <Label for="Description" class="mb-2">Description</Label>
     <Input name = "Description" type="text" id="Description" placeholder="Description" required />
   </div>
- <input type="file" onchange={(e) => file = e.target.files[0]} />
+ <input id="fileInput" type="file" onchange={handleFileChange}/>
 
 
   <Checkbox classes={{ div: "mb-6 gap-1 rtl:space-x-reverse" }} required>
