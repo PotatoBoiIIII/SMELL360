@@ -389,11 +389,11 @@
   <button style="color:blueviolet;padding:2px;margin:10px 10px"> Event </button>
   <button style="color:blueviolet;padding:2px;margin:10px 10px"> Crime </button>
 </Modal>
-<button style="color:white;padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'black' }; margin:10px 10px"
+<button style="color:{markerColor === "#00FFFF" ? "#000000": "#00FFFF"};padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'black' }; margin:10px 10px"
 onclick={() => (markerColor="#00FFFF")}> Disturbance </button>
-<button style="color:white;padding:2px;background-color:{markerColor==='#FF69B4' ? '#FF69B4' : 'black' }; margin:10px 10px"
+<button style="color:{markerColor === "#FF69B4" ? "#000000": "#FF69B4"};padding:2px;background-color:{markerColor==='#FF69B4' ? '#FF69B4' : 'black' }; margin:10px 10px"
 onclick={() => (markerColor="#FF69B4")}> Event </button>
-<button style="color:white;padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'black' }; margin:10px 10px"
+<button style="color:{markerColor === "#FF0000" ? "#000000": "#FF0000"};padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'black' }; margin:10px 10px"
 onclick={() => (markerColor="#FF0000")}> Crime </button>
 
 <h1 style="color: dimgrey; font-family: sans-serif; font-size:large; text-align:right;">

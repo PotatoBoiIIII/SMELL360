@@ -35,6 +35,7 @@ export const actions = {
 		const description = data.get("Description")?.toString()
 		const author = first+" "+last
 		console.log("id:"+id)
+		
 		update(ref(db.db,'markers/'+id), {
 
 			author: author,
