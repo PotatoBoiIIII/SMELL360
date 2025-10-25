@@ -320,9 +320,10 @@
  
 
     </div>
-    
+    <div style = "display:flex; flex-direction: row; flex-wrap: nowrap; overflow-x:auto;">
     <img src = "{data2[id]?.image?.url}" style = "position:left; min-width:20vw">
     <!-- <img src = "https://maps.googleapis.com/maps/api/streetview?size=600x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=API_KEY"> -->
+   </div>
     <div class = "descriptionBox">
    
     <h1 class = 'description'>
