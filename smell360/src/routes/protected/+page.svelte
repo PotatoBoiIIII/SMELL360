@@ -332,7 +332,7 @@ const handleLogout = () => {
   <nav class="flex gap-4">
     {#if $authUser}
     <div  style="display:flex; justify-content: space-evenly;align-items: center;margin-right:5vw;margin-bottom: 1vh;">
-      <h1>
+      <h1 class = "username">
         {username}
       </h1>
       <button style="color:{markerColor === "#00FFFF" ? "#000000": "#00FFFF"};padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'black' }; "
@@ -342,7 +342,7 @@ const handleLogout = () => {
       <button style="color:{markerColor === "#FF0000" ? "#000000": "#FF0000"};padding:2px;background-color:{markerColor==='#FF0000' ? '#FF0000' : 'black' }; "
       onclick={() => (markerColor="#FF0000")}> Crime </button>
       <button class="hover:underline" style = "padding:2px"onclick={handleLogout}>Logout</button>
-      <a href="/" style="color: white; font-family: sans-serif; font-size:large;font-weight:bold;background-color:black; border-radius:5px; padding:5px; hover:underline;,padding-right:15em;margin-top:1vw">SMELL360</a>
+      <a href="/" style="color: white; font-family: sans-serif; font-size:large;font-weight: 600;background-color:black; border-radius:5px; padding:5px; hover:underline;,padding-right:15em;margin-top:1vw">SMELL360</a>
       
       </div>
     {:else}
@@ -513,6 +513,18 @@ h1{
   border-color:white;
   padding:5;
   text-align:center;
+}
+.username{
+   font-family: Brush Script MT, cursive; 
+   font-size: 24px; 
+   font-style: normal; 
+   font-variant: normal; 
+   font-weight: 700; 
+   line-height: 26.4px;
+   text-align: center;
+   margin-left:1vw;
+   margin-top: 3vh;
+   text-decoration: underline;
 }
 .postAuthor{
   padding:5px;
