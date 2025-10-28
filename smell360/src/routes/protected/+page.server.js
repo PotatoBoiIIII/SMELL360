@@ -1,4 +1,4 @@
-/** @satisfies {import('./$types').Actions} */
+/** @satisfies {import('../$types.js').Actions} */
 import db from '$lib/firebase.js'
 import { ref, push,update, remove,serverTimestamp } from "firebase/database";
 
