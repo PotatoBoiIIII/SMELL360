@@ -6,8 +6,7 @@
   import { Input, Label, Button, Checkbox, A } from "flowbite-svelte";
   import { getDatabase, ref, child, push, update, set,query,get,onValue, remove } from "firebase/database";  
   import db from '$lib/firebase.js'
-  import storage from '$lib/firebase.js'
-  import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+  import { ref as storageRef, uploadBytes, getDownloadURL,getStorage } from "firebase/storage";
   import { ref as dbRef } from "firebase/database";
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
@@ -43,7 +42,7 @@
 
   let file;
   
-  
+  const storage = getStorage();
   // let name = '';
 
   // openPost = false;\
@@ -80,22 +79,29 @@ const handleLogout = () => {
   async function uploadImage() {
     if (!file) return alert("Please select a file.");
     try {
+     
     const uniqueName = `${Date.now()}_${file.name}`;
 
-      const imageRef = storageRef(storage.storage, `images/${uniqueName}`);
-
+      const imageRef = storageRef(storage, `images/${uniqueName}`);
       // Upload file to Firebase Storage
       await uploadBytes(imageRef, file);
-
+    
       // Get the download URL
-      const url = await getDownloadURL(imageRef);
-
+      let imageurl;
+      await getDownloadURL(imageRef)
+      .then((url)=> imageurl = url)
+      .catch((error)=>alert(error))
+      
       // Save the URL and some metadata to Realtime Database
-      const imagesRef = dbRef(db.db, "markers/"+id+"/image"
+      if(id===null){
+        alert("id is null")
+      }
+      
+      const imagesRef = dbRef(db.db, 'markers/${id}/image'
       );
       
       await set(imagesRef, {
-        url,
+        imageurl,
         name: file.name,
         createdAt: Date.now()
       });
@@ -309,6 +315,7 @@ const handleLogout = () => {
       markerColor=markerColor;
       markerElement.id = key;
       id=key;
+      id=id;
       markerElement.addEventListener('click', (event) => {
         event.stopPropagation();
         const content = `Marker at [${lng.toFixed(4)}, ${lat.toFixed(4)}]`;

@@ -69,7 +69,7 @@ const login = () => {
         />
 
         <button type="submit" class="default-action login-button">Login</button>
-        
+         <a href="/register" class="login-link">Don't have an account? Sign up here.</a>
         {#if !success && success !== undefined}
             <div class="error-message">
                 There was an error logging in. Please check your credentials and try again.
@@ -100,6 +100,13 @@ const login = () => {
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); /* light shadow */
         width: 100%; /* w-full */
         max-width: 400px; /* Max width for large screens */
+    }
+    .login-link{
+        text-align: center;
+        color: blue;
+    }
+    .login-link:hover{
+        color: rgb(10, 97, 126);
     }
 
     /* Tablet/Desktop Width adjustment (Equivalent to: sm:w-10/12) */
