@@ -29,24 +29,21 @@ export const actions = {
 		console.log("data retrived")
 		console.log(typeof data.get("markerId"))
 		const id = data.get('markerId')?.toString()
-		const first = data.get('firstName')?.toString()
-		const last = data.get('lastName')?.toString()
-		const title = data.get("Title")?.toString()
+		
 		const description = data.get("Description")?.toString()
-		const author = first+" "+last
+		const username  = data.get("username")?.toString()
 		console.log("id:"+id)
 		
 		update(ref(db.db,'markers/'+id), {
 
-			author: author,
-			title: title,
+			author: username,
 			description: description,
 			timestamp: serverTimestamp()
 
 		})
 		
 
-		return { success: true, message: data.get('email')  };
+		return { success: true  };
 		
 	}
 };

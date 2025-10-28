@@ -14,6 +14,7 @@
   import { signOut } from 'firebase/auth';
   import  firebaseAuth  from '../../lib/firebase.js';
   import { authUser } from '../../lib/authStore.js';
+  import {getAuth} from "firebase/auth"
 
   /** @type {import('./$types').PageProps} */
 	let { data, form } = $props();
@@ -46,6 +47,23 @@
   // let name = '';
 
   // openPost = false;\
+
+    let auth = getAuth();
+    
+    let user = auth.currentUser;
+    let uid;
+    if(user){
+      uid = user.uid;
+    }else{
+      uid = "No user is signed in."
+      console.log("no user")
+    }
+    let username=$state("");
+    onValue(ref(db.db, 'users/'+uid), (snapshot) => {
+      const data = snapshot.val();
+      username = data.username.username;
+      console.log(username)
+    })
 
 const handleLogout = () => {
     signOut(firebaseAuth.firebaseAuth)
@@ -314,6 +332,9 @@ const handleLogout = () => {
   <nav class="flex gap-4">
     {#if $authUser}
     <div  style="display:flex; justify-content: space-evenly;align-items: center;margin-right:5vw;margin-bottom: 1vh;">
+      <h1>
+        {username}
+      </h1>
       <button style="color:{markerColor === "#00FFFF" ? "#000000": "#00FFFF"};padding:2px;background-color:{markerColor==='#00FFFF' ? '#00FFFF' : 'black' }; "
       onclick={() => (markerColor="#00FFFF")}> Disturbance </button>
       <button style="color:{markerColor === "#FF69B4" ? "#000000": "#FF69B4"};padding:2px;background-color:{markerColor==='#FF69B4' ? '#FF69B4' : 'black' }; "
@@ -395,32 +416,7 @@ const handleLogout = () => {
 
 <form  method="POST" action="?/login">
   <Input type="hidden" name="markerId" value={id} />
-  <div class="mb-6 grid gap-6 md:grid-cols-2">
-    <div>
-      <Label for="first_name" class="mb-2">First name</Label>
-      <Input name = 'firstName' type="text" id="first_name" placeholder={id} required />
-    </div>
-    <div>
-      <Label for="last_name" class="mb-2">Last name</Label>
-      <Input name = 'lastName' type="text" id="last_name" placeholder="Doe" required />
-    </div>
-  </div>
-  <div class="mb-6">
-    <Label for="email" class="mb-2">Email address</Label>
-    <Input name = "email" type="email" id="email" placeholder="john.doe@company.com" required />
-  </div>
-  <div class="mb-6">
-    <Label for="password" class="mb-2">Password</Label>
-    <Input name = "password" type="password" id="password" placeholder="•••••••••" required />
-  </div>
-  <div class="mb-6">
-    <Label for="confirm_password" class="mb-2">Confirm password</Label>
-    <Input name = "confirmPassword" type="password" id="confirm_password" placeholder="•••••••••" required />
-  </div>
-  <div class="mb-6">
-    <Label for="Title" class="mb-2">Title</Label>
-    <Input name = "Title" type="text" id="Title" placeholder="Title" required />
-  </div>
+  <Input type = "hidden" name = "username" value = {username}/>
    <div class="mb-6">
     <Label for="Description" class="mb-2">Description</Label>
     <Input name = "Description" type="text" id="Description" placeholder="Description" required />

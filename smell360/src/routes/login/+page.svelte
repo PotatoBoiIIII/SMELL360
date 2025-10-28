@@ -1,19 +1,28 @@
 <script lang="ts">
   
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, setPersistence, signInWithEmailAndPassword, browserLocalPersistence } from "firebase/auth";
   import  firebaseAuth  from '../../lib/firebase.js';
   import { goto } from '$app/navigation';
   import { authUser } from '../../lib/authStore.js';
+  
 
   
 let success: boolean | undefined = undefined;
 let email: string;
   let password: string;
 
-  
+  const auth = getAuth();
 
 const login = () => {
-    signInWithEmailAndPassword(firebaseAuth.firebaseAuth, email, password)
+   
+    setPersistence(auth, browserLocalPersistence)
+        .then(() => {
+            // Existing and future Auth states are now persisted in the current
+            // session only. Closing the window would clear any existing state even
+            // if a user forgets to sign out.
+            // ...
+            // New sign-in will be persisted with session persistence.
+            return signInWithEmailAndPassword(firebaseAuth.firebaseAuth, email, password)
       .then((userCredential) => {
         $authUser = {
           uid: userCredential.user.uid,
@@ -29,6 +38,13 @@ const login = () => {
 
         success = false;
       });
+        })
+        .catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
+    
   };
 </script>
 

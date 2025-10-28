@@ -36,6 +36,7 @@ if (browser) { // <-- Check if running in the browser
 }
 
 const firebaseAuth = getAuth(app);
+
 // Initialize Realtime Database and get a reference to the service (safe for both SSR and client)
 const db = getDatabase(app);
 
