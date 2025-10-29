@@ -13,8 +13,8 @@
   import { signOut } from 'firebase/auth';
   import  firebaseAuth  from '../../lib/firebase.js';
   import { authUser } from '../../lib/authStore.js';
-  import {getAuth} from "firebase/auth"
-
+  import {getAuth, onAuthStateChanged} from "firebase/auth"
+    
   /** @type {import('./$types').PageProps} */
 	let { data, form } = $props();
   let map;
@@ -48,7 +48,15 @@
   // openPost = false;\
 
     let auth = getAuth();
-    
+    $effect(() => {
+        if (!$authUser) {
+            // Use a short delay to ensure the SvelteKit router has fully loaded 
+            // and the component is ready to redirect.
+            setTimeout(() => {
+                goto('/login');
+            }, 0); 
+        }
+    });
     let user = auth.currentUser;
     let uid;
     if(user){
@@ -68,7 +76,7 @@ const handleLogout = () => {
     signOut(firebaseAuth.firebaseAuth)
       .then(() => {
         $authUser = undefined;
-        goto('/login');
+        goto('/');
       })
       .catch((error) => {
         console.log(error);
@@ -93,13 +101,14 @@ const handleLogout = () => {
       .catch((error)=>alert(error))
       
       // Save the URL and some metadata to Realtime Database
-      if(id===null){
+      if(id===""){
         alert("id is null")
       }
+      console.log(id)
       
-      const imagesRef = dbRef(db.db, 'markers/${id}/image'
+      const imagesRef = dbRef(db.db, `markers/${id}/image`
       );
-      
+      console.log('markers/${id}/image')
       await set(imagesRef, {
         imageurl,
         name: file.name,
@@ -403,7 +412,7 @@ const handleLogout = () => {
 
     </div>
     <div style = "display:flex; flex-direction: row; flex-wrap: nowrap; overflow-x:auto;">
-    <img src = "{data2[id]?.image?.url}" style = "position:left; min-width:20vw">
+    <img src = "{data2[id]?.image?.imageurl}" style = "position:left; min-width:20vw">
     <!-- <img src = "https://maps.googleapis.com/maps/api/streetview?size=600x400&location={data2[id]?.marker?.latitude},{data2[id]?.marker?.longitude}&fov=80&heading=70&pitch=0&key=API_KEY"> -->
    </div>
     <div class = "descriptionBox">

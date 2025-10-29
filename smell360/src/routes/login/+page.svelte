@@ -11,11 +11,11 @@ let success: boolean | undefined = undefined;
 let email: string;
   let password: string;
 
-  const auth = getAuth();
+ 
 
 const login = () => {
    
-    setPersistence(auth, browserLocalPersistence)
+    setPersistence(firebaseAuth.firebaseAuth, browserLocalPersistence)
         .then(() => {
             // Existing and future Auth states are now persisted in the current
             // session only. Closing the window would clear any existing state even
