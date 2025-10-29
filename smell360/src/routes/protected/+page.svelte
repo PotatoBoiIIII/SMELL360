@@ -431,18 +431,27 @@ const handleLogout = () => {
 <Modal bind:showModal={openPost}>
 
 <form  method="POST" action="?/login">
+  <h1 style = "font-family: Brush Script MT, cursive; 
+   font-size: 24px; 
+   font-style: normal; 
+   font-variant: normal; 
+   font-weight: 700; 
+   line-height: 26.4px;
+   text-align: center;
+   margin-left:1vw;
+   margin-top: 3vh;
+   text-decoration: underline; ">
+    Create Post
+  </h1>
   <Input type="hidden" name="markerId" value={id} />
   <Input type = "hidden" name = "username" value = {username}/>
-   <div class="mb-6">
-    <Label for="Description" class="mb-2">Description</Label>
-    <Input name = "Description" type="text" id="Description" placeholder="Description" required />
+   <div class="mb-6" style = "display:flex; flex-direction:column">
+    <textarea name = "Description" class = "descriptionInput"  id="Description"  placeholder="Description"></textarea>
   </div>
- <input id="fileInput" type="file" onchange={handleFileChange}/>
+ <input class = "fileInput" id="fileInput" type="file" onchange={handleFileChange}/>
 
 
-  <Checkbox classes={{ div: "mb-6 gap-1 rtl:space-x-reverse" }} required>
-    I agree with the <A href="/" class="text-primary-700 dark:text-primary-600 hover:underline">terms and conditions</A>.
-  </Checkbox>
+  
   <button onclick={()=> uploadImage()} formaction = "?/register">Submit</button>
 </form>
 
@@ -460,6 +469,17 @@ const handleLogout = () => {
     border-radius: 5%;
     max-width:100vw;
     max-height:50vh
+  }
+  .descriptionInput{
+    min-width:30vw; 
+    min-height: 20vh; 
+    text-align:left; 
+    vertical-align: top; 
+    padding-top:3px;
+    
+  }
+  .fileInput{
+    color:white;
   }
   .descriptionBox{
     background-color:rgb(72, 72, 72);
@@ -512,7 +532,6 @@ const handleLogout = () => {
     padding-right:5px;
     display:inline-block;
     }
-
 button {
   border: 2px solid #333; 
   border-radius: 8px;
@@ -524,7 +543,7 @@ button:hover {
   background-color: rgb(108, 90, 90); 
 }
 h1{
-  color:#0056b3;
+  color:#3b9aff;
   border-width:5px;
   border-color:white;
   padding:5;
