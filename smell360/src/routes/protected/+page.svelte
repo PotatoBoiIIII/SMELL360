@@ -76,7 +76,7 @@ const handleLogout = () => {
     signOut(firebaseAuth.firebaseAuth)
       .then(() => {
         $authUser = undefined;
-        goto('/');
+        goto('/login');
       })
       .catch((error) => {
         console.log(error);
